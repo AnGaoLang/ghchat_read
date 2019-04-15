@@ -1,0 +1,20 @@
+.userInfo {
+  padding: 10px 20px;
+  p {
+    font-size: 12px;
+    padding: 10px 0px;
+    white-space:nowrap; 
+  }
+  .name {
+    font-size: 16px;
+    padding-top: 10px;
+  }
+  .icon {
+    font-size: 40px;
+    padding-top: 10px;
+    cursor: pointer;
+  }
+  .website, .github {
+    cursor: pointer;
+  }
+}

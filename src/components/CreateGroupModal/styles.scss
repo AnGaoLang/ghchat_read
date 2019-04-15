@@ -1,0 +1,46 @@
+ .groupModalContent {
+        font-size: 22px;
+        margin-top: 20px;
+        p{
+            input, textarea  {
+                font-size: 14px;
+                outline: none;
+                resize: none;
+                padding-left: 0;
+                border: 1px solid #fff;
+                color: #999; 
+            }
+            input {
+                margin-left: -26px
+            }
+            span {
+                float: left;
+                font-size: 14px;
+                margin-top: 4px;  
+                width: 20%;
+            }
+            textarea {
+                padding-top: 6px;
+                width: 70%;
+            }
+            input::-webkit-input-placeholder , textarea::-webkit-input-placeholder {
+                /* WebKit browsers */
+                // font-size: 0.24rem;
+                color: #cccccc;
+            }
+            input:-moz-placeholder, textarea:-moz-placeholder {
+                /* Mozilla Firefox 4 to 18 */
+                // font-size: 0.24rem;
+                color: #cccccc;
+            }
+            input::-moz-placeholder, textarea::-moz-placeholder {
+                /* Mozilla Firefox 19+ */
+                // font-size: 0.24rem;
+                color: #cccccc;
+            }
+            input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+                /* Internet Explorer 10+ */
+                color: #cccccc;
+            }
+        }
+    }
