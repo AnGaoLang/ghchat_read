@@ -77,6 +77,9 @@ class LogIn extends Component {
     const { visible } = this.state.modal;
     return (
       <div className="login">
+        <SignInSignUp setValue={this.setValue} isLogin />
+
+        {/* 模态框 visible控制显示、隐藏，confirm确认的处理函数，hasConfirm是否显示确认键*/}
         <Modal
           title="提示"
           visible={visible}
@@ -87,7 +90,6 @@ class LogIn extends Component {
             {'您已登录成功'}
           </p>
         </Modal>
-        <SignInSignUp setValue={this.setValue} isLogin />
       </div>
     );
   }
