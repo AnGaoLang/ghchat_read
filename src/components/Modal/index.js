@@ -41,7 +41,7 @@ function confirmCancelRender(props) {
       </div>
     );
   }
-  return null;
+  return null; // 都没有返null
 }
 
 

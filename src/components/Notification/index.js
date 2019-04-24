@@ -2,8 +2,10 @@ import React from 'react';
 import Notification from 'rc-notification';
 import './style.scss';
 
+// rc-notification第三方提示框组件
 function addIcon(msg, type) {
   let content;
+  // 依据不同type返回不同提示框的具体内容
   if (type === 'success') {
     content = (
       <div className="all-icon">

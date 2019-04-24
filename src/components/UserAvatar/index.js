@@ -26,15 +26,15 @@ function sumChars(str) {
 export default class UserAvatar extends Component {
   render() {
     const {
-      src,
-      name,
-      isGray,
-      color,
+      src, // 图片链接
+      name, // 用户名
+      isGray, // 是否使用灰度模式
+      color, //设置当以背景色
       colors = defaultColors,
-      clickAvatar,
-      size,
-      borderRadius,
-      showLogo,
+      clickAvatar, // 点击头像触发的函数
+      size, // 尺寸
+      borderRadius, // 圆角尺寸
+      showLogo, // 关联github账户后，是都显示github账户的logo
     } = this.props;
 
     if (!name) throw new Error('UserAvatar requires a name');
@@ -56,9 +56,9 @@ export default class UserAvatar extends Component {
     };
 
     let inner;
-    if (src) {
+    if (src) { // 有图片用图片
       inner = <img style={imgStyle} src={src} alt={name} />;
-    } else {
+    } else { // 没传入图片则使用色块
       let background;
       if (color) {
         background = color;

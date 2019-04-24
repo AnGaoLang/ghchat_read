@@ -51,7 +51,7 @@ export default class Register extends Component {
       name,
       password
     }, async () => {
-      await this.register();
+      await this.register(); // 注册
     });
   }
 
