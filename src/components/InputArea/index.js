@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Picker } from 'emoji-mart';
+import { Picker } from 'emoji-mart'; // 表情包组件
 import Fuse from 'fuse.js';
 import upload from '../../utils/qiniu';
 import './style.scss';
@@ -13,8 +13,8 @@ export default class InputArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputMsg: '',
-      showEmojiPicker: false,
+      inputMsg: '', // 输入的信息
+      showEmojiPicker: false, // 是否显示表情选择组件，默认不显示
       relatedMembers: [],
     };
     this._placeholder = null;
@@ -31,19 +31,21 @@ export default class InputArea extends Component {
     }
   }
 
+  // 发送消息
   _sendMessage = ({ attachments = [], message }) => {
     const { sendMessage } = this.props;
     const { inputMsg } = this.state;
-    sendMessage(message || inputMsg, attachments);
-    this.state.inputMsg = '';
-    this.nameInput.focus();
+    sendMessage(message || inputMsg, attachments); // 父组件传递进来的发送消息函数
+    // this.setState({inputMsg: ''});
+    this.state.inputMsg = ''; // 还原清空textarea(在sendMessage里调用了setState),父子组件作为不同的class实例，改变同名的state会互相影响？
+    this.nameInput.focus(); // 聚焦textarea
   }
 
   _selectSomeOneOrNot = () => {
     const { inputMsg } = this.state;
     const shouldPrompt = /\S*@$|\S*@\S+$/.test(inputMsg);
     if (!shouldPrompt) {
-      this.setState({ relatedMembers: [] });
+      // this.setState({ relatedMembers: [] });
       return;
     }
     const groupMembers = this.props.groupMembers;
@@ -51,7 +53,7 @@ export default class InputArea extends Component {
       const fuse = new Fuse(groupMembers, this.filterOptions);
       const filterText = /@\S*$/.exec(inputMsg)[0].slice(1);
       const relatedMembers = filterText ? fuse.search(filterText) : groupMembers;
-      this.setState({ relatedMembers });
+      // this.setState({ relatedMembers });
     }
   }
 
@@ -63,15 +65,18 @@ export default class InputArea extends Component {
     });
   }
 
+  // 显示或隐藏表情选择组件
   _clickShowEmojiPicker = () => {
     const { showEmojiPicker } = this.state;
     this.setState({ showEmojiPicker: !showEmojiPicker });
   }
 
+  // 选择表情
   _selectEmoji = (emoji) => {
     this.setState(state => ({ inputMsg: `${state.inputMsg} ${emoji.colons}` }));
     this._clickShowEmojiPicker();
     this.nameInput.focus();
+    console.log(emoji)
   }
 
   componentDidMount() {
@@ -82,6 +87,7 @@ export default class InputArea extends Component {
     this.nameInput.focus();
   }
 
+  // 上传文件
   _onSelectFile = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -191,16 +197,17 @@ export default class InputArea extends Component {
 
   render() {
     const { inputMsg, showEmojiPicker, relatedMembers } = this.state;
+    // 机器人聊天隐藏表情选择和文件上传
     const robotStyle = {
       visibility: 'hidden'
     };
     const buttonClass = inputMsg ? 'btn btnActive' : 'btn';
     return (
       <div className="input-msg">
-        { showEmojiPicker && <div onClick={this._clickShowEmojiPicker} className="mask" />}
-        { showEmojiPicker && <Picker onSelect={this._selectEmoji} backgroundImageFn={(() => 'https://cdn.aermin.top/emojione.png')} showPreview={false} />}
         <div className="left" style={this.props.isRobotChat ? robotStyle : {}}>
+          {/* emoji */}
           <svg onClick={this._clickShowEmojiPicker} className="icon emoji" aria-hidden="true"><use xlinkHref="#icon-smile" /></svg>
+          {/* file upload */}
           <label className="file">
             <svg className="icon" aria-hidden="true"><use xlinkHref="#icon-file" /></svg>
             <input type="file" className="file-input" onChange={this._onSelectFile} />
@@ -216,6 +223,11 @@ export default class InputArea extends Component {
           onKeyPressCapture={this._keyPress} />
         {/* <pre id="textarea" /> */}
         <p className={buttonClass} onClick={this._sendMessage}>发送</p>
+
+        {/* emojiPicker mask */}
+        { showEmojiPicker && <div onClick={this._clickShowEmojiPicker} className="mask" />}
+        {/* emojiPicker component */}
+        { showEmojiPicker && <Picker onSelect={this._selectEmoji} backgroundImageFn={(() => 'https://cdn.aermin.top/emojione.png')} showPreview={true} />}
       </div>
     );
   }

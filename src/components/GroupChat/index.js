@@ -215,7 +215,9 @@ class GroupChat extends Component {
           chatType="groupChat"
           clickAvatar={user_id => this._clickPersonAvatar(user_id)}
         />
+        {/* toggle chatInfo */}
         { showGroupChatInfo && <div onClick={() => this._showGroupChatInfo(false)} className="groupChatInfoMask" />}
+        {/* chatInfo */}
         { showGroupChatInfo && (
         <GroupChatInfo
           groupInfo={groupInfo}

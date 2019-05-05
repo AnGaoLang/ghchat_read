@@ -23,11 +23,11 @@ import Socket from '../../utils/socket';
 class InitApp {
   constructor(props) {
     this.WEBSITE_ADDRESS = process.env.NODE_ENV === 'production' ? 'https://im.aermin.top' : 'http://localhost:3000';
-    this._userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    this._userInfo = JSON.parse(localStorage.getItem('userInfo')); // 用户信息
     this._hasCalledMe = false;
+    this._history = props.history; // 页面路由信息
     this._browserNotification = new BrowserNotification();
     this._chat = new Chat();
-    this._history = props.history;
     this._socket = new Socket();
   }
 

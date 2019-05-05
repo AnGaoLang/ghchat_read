@@ -46,17 +46,6 @@ const addGroupInfoAction = ({
   return { type: ADD_GROUP_INFO, data: allGroupChatsCopy };
 };
 
-const updateGroupTitleNoticeAction = ({
-  allGroupChats, groupNotice, groupName, groupId
-}) => {
-  const allGroupChatsCopy = new Map(allGroupChats);
-  const goalGroupChat = allGroupChatsCopy.get(groupId);
-  if (!goalGroupChat || !goalGroupChat.groupInfo) console.error('不存在此群的信息');
-  goalGroupChat.groupInfo = { ...goalGroupChat.groupInfo, group_notice: groupNotice, name: groupName };
-  return { type: UPDATE_GROUP_TITLE_NOTICE, data: allGroupChatsCopy };
-};
-
-
 const addGroupMessageAndInfoAction = ({
   allGroupChats, groupId, messages, message, member,
   members, groupInfo
@@ -74,6 +63,15 @@ const addGroupMessageAndInfoAction = ({
   return { type: ADD_GROUP_MESSAGE_AND_INFO, data };
 };
 
+const updateGroupTitleNoticeAction = ({
+  allGroupChats, groupNotice, groupName, groupId
+}) => {
+  const allGroupChatsCopy = new Map(allGroupChats);
+  const goalGroupChat = allGroupChatsCopy.get(groupId);
+  if (!goalGroupChat || !goalGroupChat.groupInfo) console.error('不存在此群的信息');
+  goalGroupChat.groupInfo = { ...goalGroupChat.groupInfo, group_notice: groupNotice, name: groupName };
+  return { type: UPDATE_GROUP_TITLE_NOTICE, data: allGroupChatsCopy };
+};
 
 const deleteGroupChatAction = ({
   allGroupChats, groupId

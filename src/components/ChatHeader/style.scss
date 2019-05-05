@@ -9,13 +9,13 @@
     align-items: center;
     font-size: 26px;
     .chat-title{
-        padding-left: 20px;
+        padding-left: 45px;
         font-size: 18px;
     }
     .back-icon {
         color: $blue;
         margin-left: 10px;
-        display: none;
+        display: block;
     }
     .icon {
         position: absolute;

@@ -39,7 +39,8 @@ function RightView(props) { // 右侧的视图
       <Route path="/robot_chat" component={loadable(() => import('../containers/RobotPage'))} />
       <Route path="/group_chat/:to_group_id" component={loadable(() => import('../containers/GroupChatPage'))} />
       <Route path="/private_chat/:user_id" component={loadable(() => import('../containers/PrivateChatPage'))} />
-      {['/', '/setting'].map((path, index) => <Route path={path} exact component={loadable(() => import('../containers/WelcomePage'))} key={index} />)}
+      {/* 初次进入聊天界面的欢迎界面 */}
+      {['/', '/setting'].map((path, index) => <Route path={path} exact component={loadable(() => import('../containers/WelcomePage'))} key={index} />)} 
     </div>
   );
 }

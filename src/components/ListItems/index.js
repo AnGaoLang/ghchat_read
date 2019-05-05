@@ -16,6 +16,7 @@ class ListItems extends Component {
   }
 
   render() {
+    console.log(this.props)
     const robotChat = (
       <li
         key="-1"

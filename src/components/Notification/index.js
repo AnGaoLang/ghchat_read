@@ -4,7 +4,7 @@ import './style.scss';
 
 // rc-notification第三方提示框组件
 function addIcon(msg, type) {
-  let content;
+  let content; // notification的图标样式
   // 依据不同type返回不同提示框的具体内容
   if (type === 'success') {
     content = (

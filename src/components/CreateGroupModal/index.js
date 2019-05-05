@@ -8,32 +8,38 @@ export default class GroupModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupName: props.defaultGroupName,
-      groupNotice: props.defaultGroupNotice,
+      groupName: props.defaultGroupName, // 群名。默认''。
+      groupNotice: props.defaultGroupNotice, // 群公告。默认''。
     };
   }
 
     handleChange = (event) => {
+      // 监听input的change事件。
+      // 依据表单的name(groupName、groupNotice)，更新state。
       const { name, value } = event.target;
       this.setState({ [name]: value });
     }
 
+    // 确认按钮
     _confirm = () => {
       const { groupName, groupNotice } = this.state;
-      if (!groupName || !groupNotice) {
+      // 如果没有输入群组的名称或公告
+      if (!groupName || !groupNotice) { 
         notification('你有空行没填哦', 'error');
         return;
       }
+      // 群名不能用ghChat
       if (groupName === 'ghChat') {
         notification('这个群名仅供项目本身使用啦，请用别的群名', 'error');
         return;
       }
+      // 确认按钮的事件触发函数
       this.props.confirm({ groupName, groupNotice });
     }
 
     render() {
       const {
-        modalVisible, cancel, title
+        modalVisible, cancel, title, hasCancel, hasConfirm
       } = this.props;
       const { groupName, groupNotice } = this.state;
       return (
@@ -41,8 +47,8 @@ export default class GroupModal extends Component {
           title={title}
           visible={modalVisible}
           confirm={this._confirm}
-          hasCancel
-          hasConfirm
+          hasCancel={hasCancel}
+          hasConfirm={hasConfirm}
           cancel={cancel}
         >
           <div className="groupModalContent">

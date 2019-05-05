@@ -59,6 +59,7 @@ export default class Robot extends Component {
 
     render() {
       const { robotState } = this.props;
+      // 聊天消息列表
       const listItems = robotState.map((msg, index) => (
         <li key={index}>
           {msg.user && (
@@ -77,6 +78,7 @@ export default class Robot extends Component {
           )}
         </li>
       ));
+
       return (
         <div className="chat-wrapper">
           <ChatHeader title="机器人聊天" chatType="robot" />

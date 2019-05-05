@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   withRouter,
 } from 'react-router-dom';
-import Fuse from 'fuse.js';
+import Fuse from 'fuse.js'; // 模糊查询
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import Header from '../../containers/Header';
@@ -18,7 +18,7 @@ class HomePageList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSearching: false,
+      isSearching: false, // 是否显示搜索页面
       contactedItems: [],
       showSearchUser: true,
       showSearchGroup: true,

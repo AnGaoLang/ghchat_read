@@ -7,6 +7,7 @@ import { inviteReducer } from './reducers/inviteReducer';
 import { fetchAllGroupChatsReducer } from '../containers/GroupChatPage/groupChatReducer';
 import { fetchAllPrivateChatsReducer } from '../containers/PrivateChatPage/privateChatReducer';
 
+// 合并所有的小的reducer
 export default combineReducers({
   robotState: robotReducer,
   homePageListState: getHomePageListReducer,
