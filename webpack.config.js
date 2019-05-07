@@ -9,7 +9,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const commonConfig = require('./webpack.common.config.js');
 
 const publicConfig = {
-  devtool: 'cheap-module-source-map',
+  // devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   module: {
     rules: [{
       test: /\.css$/,

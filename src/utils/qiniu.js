@@ -1,5 +1,5 @@
 import * as qiniu from 'qiniu-js';
-
+// 青牛图片上传
 export default async function upload(file, completeEvent) {
   window.socket.emit('getQiniuToken', (data) => {
     const uploadToken = data;
