@@ -19,16 +19,16 @@ class HomePageList extends Component {
     super(props);
     this.state = {
       isSearching: false, // 是否显示搜索页面
-      contactedItems: [],
+      contactedItems: [], // 搜索时获得的返回结果
       showSearchUser: true,
       showSearchGroup: true,
-      searchResultTitle: {
+      searchResultTitle: { // 联系过的用户或群组
         user: '您联系过的用户',
         group: '您联系过的群组'
       }
     };
     this._userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this._filedStr = null;
+    this._filedStr = null; // seacrh组件内表单的输入值
     this._chat = new Chat();
     this._cleanedUnread = false;
   }
@@ -56,28 +56,8 @@ class HomePageList extends Component {
       this._cleanedUnread = true;
     }
   }
-
-  searchFieldChange(field) {
-    this._filedStr = field.toString();
-    this.setState({
-      showSearchUser: true,
-      showSearchGroup: true,
-      searchResultTitle: {
-        user: '您联系过的用户',
-        group: '您联系过的群组'
-      }
-    });
-    if (this._filedStr.length > 0) {
-      const { homePageList } = this.props;
-      const homePageListCopy = [...List(homePageList)];
-      const fuse = new Fuse(homePageListCopy, this.filterOptions);
-      const contactedItems = fuse.search(this._filedStr);
-      this.setState({ isSearching: true, contactedItems });
-    } else {
-      this.setState({ isSearching: false });
-    }
-  }
-
+  
+  // 搜索的筛选条件
   get filterOptions() {
     const options = {
       shouldSort: true,
@@ -93,20 +73,44 @@ class HomePageList extends Component {
     return options;
   }
 
+  // 搜索框输入时的处理函数，参数为传入输入文本框的值
+  searchFieldChange(field) {
+    this._filedStr = field.toString(); // 表单输入的值转为字符串
+    this.setState({
+      showSearchUser: true, // 是否显示网络查找相关的用户
+      showSearchGroup: true, // 是否显示网络查找相关的群组
+      searchResultTitle: {
+        user: '您联系过的用户',
+        group: '您联系过的群组'
+      }
+    });
+    if (this._filedStr.length > 0) {
+      const { homePageList } = this.props;
+      const homePageListCopy = [...List(homePageList)];  // 拷贝一个聊天框列表，并转换为不可变数据
+      // 模糊搜索
+      const fuse = new Fuse(homePageListCopy, this.filterOptions);
+      const contactedItems = fuse.search(this._filedStr);
+      this.setState({ isSearching: true, contactedItems }); // 搜索时让输入值可以写入input框，显示搜索结果页面，并获得的返回结果
+    } else {
+      this.setState({ isSearching: false }); // 没值直接隐藏
+    }
+  }
+
+  // 网络查找相关用户或网络相关群组（数据库内查找）
   searchInDB({ searchUser }) {
     window.socket.emit('fuzzyMatch', { field: this._filedStr, searchUser }, (data) => {
       if (data.searchUser) {
         this.setState(state => ({
-          showSearchUser: false,
-          searchResultTitle: { ...state.searchResultTitle, user: '所有用户' }
+          showSearchUser: false, // 查找数据库后，隐藏'网络查找相关的用户'
+          searchResultTitle: { ...state.searchResultTitle, user: '所有用户' } // 更改小标题为所有用户
         }));
         data.fuzzyMatchResult.forEach((element) => {
           element.user_id = element.id;
         });
       } else {
         this.setState(state => ({
-          showSearchGroup: false,
-          searchResultTitle: { ...state.searchResultTitle, group: '所有群组' }
+          showSearchGroup: false, // 查找数据库后，隐藏'网络查找相关的群组'
+          searchResultTitle: { ...state.searchResultTitle, group: '所有群组' } // 更改小标题为所有群组
         }));
       }
       this.setState(state => ({ contactedItems: [...state.contactedItems, ...data.fuzzyMatchResult] }));
@@ -124,23 +128,26 @@ class HomePageList extends Component {
 
   render() {
     const { homePageList, allGroupChats } = this.props;
-    homePageList.sort((a, b) => b.time - a.time);
+    homePageList.sort((a, b) => b.time - a.time); // 聊天框排序
     const {
       isSearching, contactedItems,
       showSearchUser, showSearchGroup,
       searchResultTitle
     } = this.state;
-    const contactedUsers = contactedItems.filter(e => (e.user_id && e.user_id !== this._userInfo.user_id));
-    const contactedGroups = contactedItems.filter(e => e.to_group_id);
+    const contactedUsers = contactedItems.filter(e => (e.user_id && e.user_id !== this._userInfo.user_id)); // 筛选出所有非本号用户搜索结果
+    const contactedGroups = contactedItems.filter(e => e.to_group_id); // 筛选出所有群组搜索结果
     return (
       <div className="home-page-list-wrapper">
+        {/*打开github 头部的搜索栏，创建群组 */}
         <Header searchFieldChange={field => this.searchFieldChange(field)} isSearching={isSearching} />
+        {/* 主聊天列表 */}
         <div className="home-page-list-content">
-          {/* TODO */}
-          {/* {this.state.showSpinner && <Spinner /> } */}
+          {/* isSearching为真，显示搜索结果页面。为false，默认显示聊天列表*/}
           {isSearching ? (
             <div className="searchResult">
+              {/* 小标题 联系过的用户 */}
               <p className="searchResultTitle">{searchResultTitle.user}</p>
+              {/* 用户搜索结果组成的列表 没有就显示暂无 */}
               { contactedUsers.length
                 ? (
                   <ListItems
@@ -150,6 +157,7 @@ class HomePageList extends Component {
                     clickItem={chatFromId => this.clickItemHandle({ homePageList, chatFromId })} />
                 )
                 : <p className="search-none">暂无</p>}
+              {/* 是否在数据库中查找 */}
               { showSearchUser && (
               <p
                 className="clickToSearch"
@@ -157,7 +165,9 @@ class HomePageList extends Component {
                 网络查找相关的用户
               </p>
               )}
+              {/* 小标题 联系过的群组 */}
               <p className="searchResultTitle">{searchResultTitle.group}</p>
+              {/* 群组搜索结果组成的列表 没有就显示暂无 */}
               { contactedGroups.length
                 ? (
                   <ListItems
@@ -167,6 +177,7 @@ class HomePageList extends Component {
                     clickItem={chatFromId => this.clickItemHandle({ homePageList, chatFromId })} />
                 )
                 : <p className="search-none">暂无</p>}
+              {/* 是否在数据库中查找 */}
               { showSearchGroup && (
               <p
                 className="clickToSearch"
@@ -203,7 +214,7 @@ HomePageList.propTypes = {
 
 HomePageList.defaultProps = {
   allGroupChats: new Map(),
-  homePageList: [],
+  homePageList: [], // 聊天框列表
   showCallMeTip() {},
   initializedApp: false,
   initApp() {},

@@ -12,9 +12,9 @@ export default class SearchBox extends Component {
 
   _searchFieldChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }); // 改变相应弹框的值
     const { searchFieldChange } = this.props;
-    searchFieldChange(value);
+    searchFieldChange(value); // 传入输入文本框的值
   };
 
   render() {
@@ -38,8 +38,8 @@ export default class SearchBox extends Component {
 
 
 SearchBox.propTypes = {
-  searchFieldChange: PropTypes.func,
-  isSearching: PropTypes.bool,
+  searchFieldChange: PropTypes.func, // 搜索框输入时的相应处理函数
+  isSearching: PropTypes.bool, // 是否让输入值写入input框，并显示搜索页面
 };
 
 

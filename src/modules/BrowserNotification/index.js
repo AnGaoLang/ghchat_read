@@ -27,7 +27,7 @@ export default class BrowserNotification {
   
    // 检查是都能打开nocifation
   _checkOrRequirePermission() {
-    console.log(this.notification)
+    // console.log(this.notification)
     if (!this.notification) { // 判断浏览器是否支持notification
       // eslint-disable-next-line no-alert
       notification('此浏览器不支持浏览器提示', 'warn', 3); // 浏览器不支持notification的提示框

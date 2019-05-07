@@ -37,7 +37,7 @@ export default class InputArea extends Component {
     if (this.props.inviteData) {
       this._sendMessage({ message: (`::invite::${JSON.stringify(this.props.inviteData)}`) });
       store.dispatch(inviteAction(null));
-    }
+    };
     this.nameInput.focus(); // 聚焦textarea
   }
 

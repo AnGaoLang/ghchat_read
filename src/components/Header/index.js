@@ -48,6 +48,7 @@ export default class Header extends Component {
       addGroupMessageAndInfo({
         allGroupChats, message: { ...res, name }, groupId: res.to_group_id, groupInfo
       });
+      // 跳转到对应的群组聊天
       this.props.history.push(`/group_chat/${res.to_group_id}?name=${res.name}`);
     });
   }
