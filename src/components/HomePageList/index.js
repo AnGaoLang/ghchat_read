@@ -48,9 +48,10 @@ class HomePageList extends Component {
 
   _cleanUnreadWhenReload = () => {
     const { homePageList } = this.props;
-    const chatFromId = window.location.pathname.split(/^\/\S+_chat\//)[1];
+    const chatFromId = window.location.pathname.split(/^\/\S+_chat\//)[1]; // 拿到群组或用户的id
+    // 筛选出homePageList里和chatFromId相匹配的项
     const filter = homePageList.filter(e => chatFromId && (chatFromId === e.to_group_id || chatFromId === (e.user_id && (e.user_id).toString())));
-    const goal = filter[0];
+    const goal = filter[0]; // 取得拿到的结果
     if (goal && goal.unread !== 0) {
       this._chat.clearUnreadHandle({ homePageList, chatFromId });
       this._cleanedUnread = true;
@@ -150,6 +151,7 @@ class HomePageList extends Component {
               {/* 用户搜索结果组成的列表 没有就显示暂无 */}
               { contactedUsers.length
                 ? (
+
                   <ListItems
                     isSearching={isSearching}
                     dataList={contactedUsers}

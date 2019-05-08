@@ -18,7 +18,7 @@ export default class InputArea extends Component {
       relatedMembers: [], // @时显示的关联成员
     };
     this._placeholder = null; // input的占位符
-    this._onPaste = props.isRobotChat ? () => {} : this._paste;
+    this._onPaste = props.isRobotChat ? () => {} : this._paste; // 如果和机器人聊天，则默认粘贴行文，不上传文件，不进行特殊处理
     // this._onPaste = props.isRobotChat ? () => {} : debounce(this._paste, 2000, true); // 经过debounce优化的this._paste函数调用
   }
 
@@ -43,6 +43,7 @@ export default class InputArea extends Component {
 
   // 发送消息
   _sendMessage = ({ attachments = [], message }) => {
+    debugger
     console.log(attachments)
     // 没有输入消息则不发送消息
     const { inputMsg } = this.state;
@@ -176,7 +177,7 @@ export default class InputArea extends Component {
     );
   }
 
-  // 粘贴操作的处理函数，如果粘贴的不是文件，则不进行处理。
+  // 粘贴操作的处理函数。上传文件和发送消息
   _paste = (e) => {
     // clipboardData为一个dataTransfer属性
     const clipboardData = (e.clipboardData || e.originalEvent.clipboardData); // 如果e上拿不到clipboardData，则到原生事件对象originalEvent上去拿
@@ -220,6 +221,7 @@ export default class InputArea extends Component {
     // onKeyPressCapture 以捕获的方式触发事件
     return (
       <div className="input-msg">
+        {/* 机器人聊天隐藏表情选择和文件上传 */}
         <div className="left" style={this.props.isRobotChat ? robotStyle : {}}>
           {/* emoji */}
           <svg onClick={this._clickShowEmojiPicker} className="icon emoji" aria-hidden="true"><use xlinkHref="#icon-smile" /></svg>
