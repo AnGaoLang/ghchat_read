@@ -21,6 +21,7 @@ class Setting extends Component {
   }
 
   componentWillMount() {
+    console.log(this.props)
      // 获取并判断store里的initAppState
     if (!this.props.initializedApp) {
       this._InitApp = new InitApp({ history: this.props.history });
