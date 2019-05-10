@@ -43,7 +43,6 @@ export default class InputArea extends Component {
 
   // 发送消息
   _sendMessage = ({ attachments = [], message }) => {
-    debugger
     console.log(attachments)
     // 没有输入消息则不发送消息
     const { inputMsg } = this.state;

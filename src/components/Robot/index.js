@@ -60,7 +60,8 @@ export default class Robot extends Component {
 
     render() {
       const { robotState } = this.props;
-      // 聊天消息列表，重新映射一个jsx数组
+      console.log(robotState);
+      // 聊天消息列表，重新映射一个jsx数组，msg.user存在则为机器人发送的消息，反之为用户发送的消息
       const listItems = robotState.map((msg, index) => (
         <li key={index}>
           {msg.user && (
@@ -99,7 +100,7 @@ Robot.propTypes = {
 };
 
 Robot.defaultProps = {
-  insertMsg: undefined,
-  getRobotMsg: undefined,
-  robotState: [],
+  insertMsg: undefined, // 输入框消息
+  getRobotMsg: undefined, //// 获取机器人的自动回复
+  robotState: [], // 和机器人聊天的聊天消息列表
 };

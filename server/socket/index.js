@@ -13,6 +13,7 @@ const verify = require('../middlewares/verify');
 const getUploadToken = require('../utils/qiniu');
 
 module.exports = (server) => {
+  console.log(server)
   const io = socketIo(server);
   io.use((socket, next) => {
     const token = socket.handshake.query.token;

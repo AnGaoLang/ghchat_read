@@ -12,11 +12,12 @@ const koa2FallbackApiMiddleware = require('./middlewares/koa2FallbackApiMiddlewa
 
 const app = new Koa();
 
-app.use(compress());
+app.use(compress()); // 网页压缩
 
 const server = http.createServer(app.callback());
 socketHandle(server);
 
+// 去掉跨域限制
 // app.use(cors());
 
 // 去掉跨域限制
@@ -32,7 +33,7 @@ app.use(async (ctx, next) => {
   await next();
 })
 
-app.use(bodyParser());
+app.use(bodyParser()); // 接收并解析post请求的参数
 
 console.log('server node env', process.env.NODE_ENV);
 

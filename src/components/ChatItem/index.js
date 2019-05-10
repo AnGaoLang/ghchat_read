@@ -183,14 +183,14 @@ ChatItem.propTypes = {
 };
 
 ChatItem.defaultProps = {
-  me: undefined,
-  img: undefined,
-  name: '',
-  time: undefined,
-  clickAvatar: undefined,
-  msg: '',
+  me: undefined, // 是否为当前用户发出的消息
+  img: undefined, // 图片
+  name: '', // 聊天消息上方的名字
+  time: undefined, // 发送时间
+  clickAvatar: undefined, // 点击头像的处理函数
+  msg: '', // 发送的聊天消息
   attachments: '[]',
-  github_id: null,
+  github_id: null, // github_id
   shouldScrollIntoView: true,
-  clickImage() {},
+  clickImage() {}, // 点击图片的处理函数
 };
