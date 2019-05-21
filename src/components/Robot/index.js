@@ -68,6 +68,7 @@ export default class Robot extends Component {
           <ChatItem
             msg={msg.message}
             name={msg.user}
+            clickAvatar={() => {console.log('机器人头像触发事件')}}
             time={toNormalTime(Date.parse(new Date()) / 1000)} />
           )}
           {!msg.user && (

@@ -21,10 +21,12 @@ class ChatItem extends Component {
     this.props.history.push(redirectUrl);
   }
 
+  // 点击图片的处理函数
   _clickImage(imageUrl) {
     this.props.clickImage(imageUrl);
   }
 
+  // 个人邀请
   invitePersonalCard = (inviteObj) => {
     const { name, avatar, user_id } = inviteObj;
     const redirectUrl = `/private_chat/${user_id}`;
@@ -41,6 +43,7 @@ class ChatItem extends Component {
     );
   }
 
+  // 群组邀请
   inviteGroupCard = (inviteObj) => {
     const { name, to_group_id } = inviteObj;
     const redirectUrl = `/group_chat/${to_group_id}`;
@@ -72,36 +75,45 @@ class ChatItem extends Component {
     }, 0);
   }
 
+  // 渲染上传的文本,msg为聊天的对话内容
   textRender = (msg) => {
-    const isInviteUrl = /^::invite::{"/.test(msg);
+    const isInviteUrl = /^::invite::{"/.test(msg); // 对话内容中是否包含邀请信息
     if (isInviteUrl) {
-      const inviteObj = JSON.parse(msg.replace(/::invite::/, ''));
-      if (inviteObj.to_group_id) {
+      const inviteObj = JSON.parse(msg.replace(/::invite::/, '')); // 去掉/::invite::/
+      if (inviteObj.to_group_id) { // 若是群组邀请
         return <div className="msg-render">{this.inviteGroupCard(inviteObj)}</div>;
-      } if (inviteObj.user_id) {
+      } if (inviteObj.user_id) { // 若是个人邀请
         return <div className="msg-render">{this.invitePersonalCard(inviteObj)}</div>;
       }
     }
+    // 若没有包含邀请内容,包含emoj表情的处理
     return (
       <div className="msg-render">
+        {/* 第一个参数：传入msg，包含emoj表情字符串实体的一段字符串，
+            第二个参数：SplitLinesTag用什么html标签包裹所有内容，Rule固定的正则匹配 
+            第三个参数：一个回调函数，rule是被正则捕获的emoj字符串，ruleNumber被捕获的emoj字符串的索引(第几个emoj)，返回一个html节点或则react节点*/}
         {MultiLineParser(msg,
           {
             SplitLinesTag: 'p',
             Rule: /(?:\:[^\:]+\:(?:\:skin-tone-(?:\d)\:)?)/gi
           },
-          (Rule, ruleNumber) => (
-            <Emoji
+          (Rule, ruleNumber) => {
+            {/* console.log(Rule)
+            console.log(ruleNumber) */}
+            {/* 将emoj字符实体作为一个图像显示 */}
+            return (<Emoji
               className="msg-render"
               emoji={Rule}
               backgroundImageFn={() => 'https://cdn.aermin.top/emojione.png'}
               size={26}
               fallback={(emoji, props) => (emoji ? `:${emoji.short_names[0]}:` : props.emoji)} />
-          ))
+          )})
     }
       </div>
     );
   };
 
+  // 渲染上传的文件
   filesRender = attachments => attachments.map((attachment) => {
     if (attachment.type === 'image') {
       return (
@@ -124,25 +136,31 @@ class ChatItem extends Component {
   })
 
   render() {
+    // msg为聊天的对话内容
     const {
       me, img, time, name, msg, clickAvatar, github_id
-    } = this.props;
+    } = this.props; // 父组件传递下来的，聊天对话框的必要信息
     let attachments = this.props.attachments;
     if (typeof attachments === 'string') {
       attachments = JSON.parse(attachments);
     }
     // TODO: reduce needless render
-    // console.log('attachments in chatItem', attachments);
+    console.log('attachments in chatItem', attachments);
 
     return (
       <div className="chat-item">
+        {/* me为真则是当前用户发送的聊天消息，否则为机器人发送的消息 */}
         {me ? (
           <div className="mychat">
+            {/* 用户头像 */}
             <UserAvatar name={name} src={img} size="40" showLogo={!!github_id} />
+            {/* 用户名和时间 */}
             <div className="nt">
               {time && <span>{time}</span>}
               {name && <span>{name}</span>}
             </div>
+            {/* attachments长度大于0则显示包含上传文件的聊天框对话内容
+                反之，选择纯文本的聊天内容 */}
             {attachments.length ? this.filesRender(attachments)
               : this.textRender(msg)
             }
