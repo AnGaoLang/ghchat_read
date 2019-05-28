@@ -17,6 +17,7 @@ class ChatItem extends Component {
     this._chat = new Chat();
   }
 
+  // 点击邀请链接跳转
   clickToInvite({ redirectUrl }) {
     this.props.history.push(redirectUrl);
   }
