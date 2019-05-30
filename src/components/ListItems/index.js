@@ -9,6 +9,9 @@ import './styles.scss';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ListItems extends Component {
+
+  // 点击聊天列表，改变相应的路由，显示聊天详情
+  // chatFromId: 聊天组的id； isGroupChat：是否是群组
   _clickItem = ({ chatFromId, isGroupChat }) => {
     this.props.clickItem(chatFromId);
     const chatUrl = isGroupChat ? `/group_chat/${chatFromId}` : `/private_chat/${chatFromId}`;
@@ -16,11 +19,15 @@ class ListItems extends Component {
   }
 
   render() {
+
+    // 机器人的聊天列表
     const robotChat = (
+      // 若是选中，则改变样式
       <li
         key="-1"
         style={this.props.match.path === '/robot_chat' ? { backgroundColor: '#f5f5f5' } : {}}
       >
+      {/* 将当前页面的url导向机器人聊天页，右侧聊天框显示机器人的聊天详情 */}
         <Link to="/robot_chat">
           <UserAvatar
             name="机器人小R"
@@ -33,10 +40,14 @@ class ListItems extends Component {
         </Link>
       </li>
     );
+
+    // 从props获取信息
     const {
       dataList, allGroupChats, match,
       showRobot, isSearching, showAsContacts
     } = this.props;
+
+     // 除开机器人的聊天列表(群组/私人聊天)，依据 dataList 进行映射
     const listItems = dataList && dataList.map((data, index) => {
       let message = data.message;
       const isInviteUrl = message && /::invite::{"/.test(message);
@@ -100,7 +111,9 @@ class ListItems extends Component {
     });
     return (
       <ul className="homePageList">
+        {/* 机器人 */}
         {showRobot && !isSearching && robotChat}
+        {/* 群组或个人 */}
         {listItems}
       </ul>
     );
@@ -121,9 +134,9 @@ ListItems.propTypes = {
 
 ListItems.defaultProps = {
   allGroupChats: new Map(),
-  dataList: [],
-  showRobot: false,
-  clickItem() {},
-  isSearching: false,
+  dataList: [], // 聊天列表数组
+  showRobot: false, // 是否显示机器人聊天列表
+  clickItem() {}, // 点击事件的触发函数
+  isSearching: false, // 是否搜索
   showAsContacts: false
 };

@@ -40,7 +40,7 @@ class HomePageList extends Component {
       this.props.initApp(true);
     }
   }
-
+  
   componentDidUpdate() {
     if (this._cleanedUnread || !this.props.initializedApp) return;
     this._cleanUnreadWhenReload();
