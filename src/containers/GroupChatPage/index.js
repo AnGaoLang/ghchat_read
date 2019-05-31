@@ -17,8 +17,8 @@ import {
 import GroupChat from '../../components/GroupChat';
 
 const mapStateToProps = state => ({
-  allGroupChats: state.allGroupChatsState,
-  homePageList: state.homePageListState,
+  allGroupChats: state.allGroupChatsState, // 群组本身的信息 以及 有所聊天消息（Map数据结构）
+  homePageList: state.homePageListState, // 聊天列表组成的数组
   relatedCurrentChat: state.relatedCurrentChat,
   inviteData: state.inviteState,
 });

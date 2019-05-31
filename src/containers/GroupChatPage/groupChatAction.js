@@ -5,6 +5,7 @@ const DELETE_GROUP_CHAT = 'DELETE_GROUP_CHAT';
 const ADD_GROUP_MESSAGE_AND_INFO = 'ADD_GROUP_MESSAGE_AND_INFO';
 const UPDATE_GROUP_TITLE_NOTICE = 'UPDATE_GROUP_TITLE_NOTICE';
 
+// 设置全部群组聊天的action，包括 群组本身的信息，以及所有的消息列表
 const setAllGroupChatsAction = ({ data = new Map() }) => ({
   type: SET_ALL_GROUP_CHATS,
   data

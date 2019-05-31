@@ -16,28 +16,31 @@ class InviteModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSearching: false,
+      isSearching: false, // 是否搜索
       contactedItems: [],
     };
   }
 
+  // 点击链接分享的触发函数，新建一个input函数，进行复制操作
   _copyInviteLink = () => {
     const dummy = document.createElement('input');
-    const text = `${window.location.origin}${window.location.pathname}`;
+    const text = `${window.location.origin}${window.location.pathname}`; // 获取当前页面的链接地址，去除后缀参数
     document.body.appendChild(dummy);
     dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
+    dummy.select(); // 选中input内的文本
+    document.execCommand('copy'); // 进行复制操作
     document.body.removeChild(dummy);
     notification('你已复制了邀请链接，可以发给应用外的人啦', 'success');
   }
 
+  // 搜索框输入的处理函数，传入的是输入的文本
   searchFieldChange(field) {
     this._filedStr = field.toString();
+    // 输入的内容长度大于1
     if (this._filedStr.length > 0) {
       const { homePageList } = this.props;
       const homePageListCopy = [...List(homePageList)];
-      const fuse = new Fuse(homePageListCopy, this.filterOptions);
+      const fuse = new Fuse(homePageListCopy, this.filterOptions); // 从homePageList里进行模糊搜索
       const contactedItems = fuse.search(this._filedStr);
       this.setState({ isSearching: true, contactedItems });
     } else {
@@ -45,6 +48,7 @@ class InviteModal extends Component {
     }
   }
 
+  // fuse.js模糊搜索的条件
   get filterOptions() {
     const options = {
       shouldSort: true,
@@ -77,16 +81,19 @@ class InviteModal extends Component {
         cancel={cancel}
         modalWrapperClassName="inviteModalWrapper"
         >
+        {/* 搜索框 */}
         <SearchBox
           searchFieldChange={value => this.searchFieldChange(value)}
           isSearching={this.state.isSearching}
         />
+        {/* 相关联系人的 ListItems 聊天列表*/}
         <ListItems
           dataList={isSearching ? contactedItems : homePageList}
           allGroupChats={allGroupChats}
           showAsContacts
           clickItem={chatFromId => this._clickItemHandle(chatFromId)}
         />
+        {/* 底部的链接分享 */}
         <div className="shareInviteLink" onClick={this._copyInviteLink}>
           <svg className="icon shareIcon" aria-hidden="true"><use xlinkHref="#icon-share1" /></svg>
           复制链接分享给应用外的人

@@ -59,7 +59,7 @@ export default class Robot extends Component {
     }
 
     render() {
-      const { robotState } = this.props;
+      const { robotState } = this.props; // 获取具体聊天消息
       console.log(robotState);
       // 聊天消息列表，重新映射一个jsx数组，msg.user存在则为机器人发送的消息，反之为用户发送的消息
       const listItems = robotState.map((msg, index) => (

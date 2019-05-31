@@ -39,7 +39,7 @@ export default class SearchBox extends Component {
 
 SearchBox.propTypes = {
   searchFieldChange: PropTypes.func, // 搜索框输入时的相应处理函数
-  isSearching: PropTypes.bool, // 是否让输入值写入input框，并显示搜索页面
+  isSearching: PropTypes.bool, // 是否让输入值写入input框
 };
 
 

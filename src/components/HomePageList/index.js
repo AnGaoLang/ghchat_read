@@ -120,10 +120,10 @@ class HomePageList extends Component {
 
   clickItemHandle = ({ homePageList, chatFromId }) => {
     if (this.state.isSearching) {
-      this.setState({ isSearching: false });
+      this.setState({ isSearching: false }); // 搜索也改为false
     }
     this._chat.clearUnreadHandle({ homePageList, chatFromId });
-    // clear [有人@我] [@Me]
+    // 点击后便清除[有人@我] [@Me]，将showCallMeTip更改为false
     this.props.showCallMeTip({ homePageList, chatFromId, showCallMeTip: false });
   }
 
@@ -215,9 +215,9 @@ HomePageList.propTypes = {
 
 
 HomePageList.defaultProps = {
-  allGroupChats: new Map(),
-  homePageList: [], // 聊天框列表
-  showCallMeTip() {},
+  allGroupChats: new Map(), // 所有群组的信息及聊天消息
+  homePageList: [], // 聊天框列表，全部聊天列表组成的数组
+  showCallMeTip() {}, // @我 的处理函数
   initializedApp: false,
   initApp() {},
 };

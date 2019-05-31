@@ -58,11 +58,13 @@ const updateListGroupNameAction = ({
   };
 };
 
-const showCallMeTipAction = ({ homePageList, showCallMeTip, chatFromId }) => {
-  const homePageListCopy = [...List(homePageList)];
+// homePageList：聊天框列表；showCallMeTip：是否有人@的布尔值；chatFromId群组的id
+const showCallMeTipAction = ({ homePageList, showCallMeTip, chatFromId }) => { // 函数参数的解构赋值
+  const homePageListCopy = [...List(homePageList)]; // 深拷贝homePageList
   const length = homePageListCopy.length;
   for (let i = 0; i < length; i++) {
     const { to_group_id } = homePageListCopy[i];
+    // 在目标id的群组里插入showCallMeTip属性
     if (to_group_id === chatFromId) {
       homePageListCopy[i].showCallMeTip = showCallMeTip;
       break;
@@ -70,7 +72,7 @@ const showCallMeTipAction = ({ homePageList, showCallMeTip, chatFromId }) => {
   }
   return {
     type: SHOW_CALL_ME_TIP,
-    data: homePageListCopy
+    data: homePageListCopy // 返回新的homePageList
   };
 };
 

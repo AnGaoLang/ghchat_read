@@ -15,6 +15,7 @@ const getUploadToken = require('../utils/qiniu');
 module.exports = (server) => {
   console.log(server)
   const io = socketIo(server);
+  
   io.use((socket, next) => {
     const token = socket.handshake.query.token;
     if (verify(token)) {
@@ -22,6 +23,7 @@ module.exports = (server) => {
     }
     return next(new Error(`Authentication error! time =>${new Date().toLocaleString()}`));
   });
+
   io.on('connection', (socket) => {
     const socketId = socket.id;
     let _userId;
