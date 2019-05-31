@@ -102,6 +102,6 @@ Robot.propTypes = {
 
 Robot.defaultProps = {
   insertMsg: undefined, // 输入框消息
-  getRobotMsg: undefined, //// 获取机器人的自动回复
+  getRobotMsg: undefined, // 获取机器人的自动回复
   robotState: [], // 和机器人聊天的聊天消息列表
 };

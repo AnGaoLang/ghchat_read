@@ -17,7 +17,7 @@ class InviteModal extends Component {
     super(props);
     this.state = {
       isSearching: false, // 是否搜索
-      contactedItems: [],
+      contactedItems: [], // 模糊搜索后的结果 
     };
   }
 
@@ -41,8 +41,8 @@ class InviteModal extends Component {
       const { homePageList } = this.props;
       const homePageListCopy = [...List(homePageList)];
       const fuse = new Fuse(homePageListCopy, this.filterOptions); // 从homePageList里进行模糊搜索
-      const contactedItems = fuse.search(this._filedStr);
-      this.setState({ isSearching: true, contactedItems });
+      const contactedItems = fuse.search(this._filedStr); // 模糊搜索的结果
+      this.setState({ isSearching: true, contactedItems }); // 更新contactedItems为糊搜索的结果
     } else {
       this.setState({ isSearching: false });
     }
@@ -75,6 +75,7 @@ class InviteModal extends Component {
     } = this.props;
     const { isSearching, contactedItems } = this.state;
     return (
+      // 显示弹出框
       <Modal
         title={title}
         visible={modalVisible}

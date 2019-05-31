@@ -22,10 +22,10 @@ class GroupChat extends Component {
     this.state = {
       groupMsgAndInfo: {},
       showGroupChatInfo: false,
-      showPersonalInfo: false,
       personalInfo: {},
-      showLeaveGroupModal: false,
-      showInviteModal: false
+      showPersonalInfo: false, // 是否显示个人信息详情弹框
+      showLeaveGroupModal: false, // 是否显示群组信息详情弹框
+      showInviteModal: false // 是否显示邀请分享弹框
     };
     this._chat = new Chat();
     this._didMount = false;
@@ -82,6 +82,7 @@ class GroupChat extends Component {
     );
   }
 
+  // 切换显示群组信息详情弹框
   _showLeaveModal = () => {
     this.setState(state => ({ showLeaveGroupModal: !state.showLeaveGroupModal }));
   }
@@ -117,6 +118,7 @@ class GroupChat extends Component {
     return false;
   }
 
+  // 根据value，切换显示个人信息详情弹框
   _showPersonalInfo(value) {
     this.setState({ showPersonalInfo: value });
   }
@@ -153,6 +155,7 @@ class GroupChat extends Component {
     return this.props.match.params.to_group_id;
   }
 
+  // 切换显示邀请分享弹框 
   _showInviteModal = () => {
     this.setState(state => ({ showInviteModal: !state.showInviteModal }));
   }
@@ -215,9 +218,9 @@ class GroupChat extends Component {
           chatType="groupChat"
           clickAvatar={user_id => this._clickPersonAvatar(user_id)}
         />
-        {/* toggle chatInfo */}
+        {/* 切换显示群组详情弹框 */}
         { showGroupChatInfo && <div onClick={() => this._showGroupChatInfo(false)} className="groupChatInfoMask" />}
-        {/* chatInfo */}
+        {/* 群组详情弹框 */}
         { showGroupChatInfo && (
         <GroupChatInfo
           groupInfo={groupInfo}

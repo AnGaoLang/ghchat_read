@@ -120,7 +120,7 @@ class ListItems extends Component {
                 )}
             </div>
             
-            {/* 最新聊天消息，data.showCallMeTip为true，有人@时，则在前天显示提示 */}
+            {/* 最新聊天消息，data.showCallMeTip为true，有人@时，则在前面显示提示 */}
             {!showAsContacts
               && (
               <div className="message">
