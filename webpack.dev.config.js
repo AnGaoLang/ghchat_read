@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const commonConfig = require('./webpack.common.config.js');
 
 const devConfig = {
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   entry: {
     app: [
       'babel-polyfill',
@@ -31,7 +31,7 @@ const devConfig = {
   devServer: {
     contentBase: path.join(__dirname, './src'), // 让WEB服务器运行静态资源（index.html）
     historyApiFallback: true,
-    host: '127.0.0.1',
+    host: '127.0.0.1'
   },
   plugins: [
     new webpack.DefinePlugin({

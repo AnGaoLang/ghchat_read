@@ -161,7 +161,7 @@ module.exports = (server) => {
         fn({ fuzzyMatchResult, searchUser: data.searchUser });
       });
 
-      // qiniu token
+      // 获取七牛的token
       socket.on('getQiniuToken', async (fn) => {
         const uploadToken = await getUploadToken();
         return fn(uploadToken);

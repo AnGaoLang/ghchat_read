@@ -136,12 +136,15 @@ export default class InputArea extends Component {
     const reader = new FileReader(); // 实例化一个fileReader对象
     // 读取文件完成后的回调，不论成功或失败
     reader.onloadend = (event) => {
+      // 判断文件大小是否超过2MB
       const limitSize = 1000 * 1024 * 2; // 2 MB
       if (file.size > limitSize) {
         notification('发的文件不能超过2MB哦!', 'warn', 2);
         return;
       }
+      // 读取完成后
       if (event.target.readyState === FileReader.DONE) { // (0:FileReader.EMPTY, 1:FileReader.LOADING, 2:FileReader.DONE)
+        // 这里使用七牛处理上传的图片，返回一个图片的url
         upload(file, (fileUrl) => {
           const type = file.type.split('/')[0];
           const attachments = [{ fileUrl, type, name: file.name }];

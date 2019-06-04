@@ -1,6 +1,7 @@
 import * as qiniu from 'qiniu-js';
-// 青牛图片上传
+// 七牛图片上传
 export default async function upload(file, completeEvent) {
+  // 获取七牛的token
   window.socket.emit('getQiniuToken', (data) => {
     const uploadToken = data;
     const observer = {
