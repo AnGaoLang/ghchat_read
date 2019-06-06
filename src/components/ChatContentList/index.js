@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Viewer from 'react-viewer';
+import Viewer from 'react-viewer'; // 预览图片插件
 import ChatItem from '../ChatItem';
 import { toNormalTime } from '../../utils/transformTime';
 import './styles.scss';
@@ -57,6 +57,7 @@ export default class ChatContentList extends Component {
         this._executeNextLoad = true;
       }).catch((error) => {
         if (error === 'try again later') {
+          // 延迟3s后 this._executeNextLoad 改为true
           sleep(3000).then(() => {
             this._executeNextLoad = true;
           });
@@ -82,23 +83,33 @@ export default class ChatContentList extends Component {
     this._loadingNewMessages = true;
   }
 
+  // 滚动聊天框时的事件监听函数
   _onScroll = (e) => {
+     // 若聊天框的dom元素不存在，则直接返回
     if (!this._ulRef) return;
+    // 获取聊天框滚动的高度，整体包括被隐藏的高度，视口的高度
     const { scrollTop, scrollHeight, clientHeight } = e && e.target;
+    // 整个的高度赋值给this._scrollHeight
     this._scrollHeight = scrollHeight;
+    
+    // 如果滚动高度为0(再最顶部)，有滚动条，且this._executeNextLoad为true(执行下次加载)
     if (scrollTop === 0 && scrollHeight !== clientHeight && this._executeNextLoad) {
+      // 是否加入了当前群组，依据是否根据群组id从allGroupChats里获取了群组相关信息
       if (!this.props.shouldScrollToFetchData) {
         notification('查看更多请先加群哦', 'warn');
         return;
       }
+      // 懒加载聊天消息
       this._lazyLoadMessage();
     }
   }
 
+  // 点击图片的处理函数，放大预览图片
   clickImage = (imageUrl) => {
     this.setState({ imageUrl, imageVisible: true });
   }
 
+  // 关闭图片预览
   _closeImageView = () => {
     this.setState({ imageVisible: false });
   }
@@ -146,12 +157,14 @@ export default class ChatContentList extends Component {
         ref={(list) => { this._ulRef = list; }}
         onScroll={this._onScroll}
       >
+        {/* 图片放大预览 */}
         <Viewer
           visible={this.state.imageVisible}
           noNavbar
           onClose={this._closeImageView}
           images={[{ src: this.state.imageUrl, alt: '' }]}
         />
+
         {listItems}
       </ul>
     );

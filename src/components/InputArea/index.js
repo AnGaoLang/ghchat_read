@@ -43,6 +43,7 @@ export default class InputArea extends Component {
 
   // 发送消息
   _sendMessage = ({ attachments = [], message }) => {
+     // 上传文件必要信息组成的数组
     console.log(attachments)
     // 没有输入消息则不发送消息
     const { inputMsg } = this.state;
@@ -50,7 +51,7 @@ export default class InputArea extends Component {
     // 有输入消息。
 
     const { sendMessage } = this.props;
-    sendMessage(message || inputMsg, attachments); // 父组件传递进来的发送消息函数
+    sendMessage(message || inputMsg, attachments); // 父组件传递进来的发送消息函数，文本消息或上传的文件
     // this.setState({inputMsg: ''});
     this.state.inputMsg = ''; // 还原清空textarea(在sendMessage里调用了setState),父子组件作为不同的class实例，改变同名的state会互相影响？
     this.nameInput.focus(); // 聚焦textarea
@@ -141,13 +142,16 @@ export default class InputArea extends Component {
       if (file.size > limitSize) {
         notification('发的文件不能超过2MB哦!', 'warn', 2);
         return;
-      }
+      };
+
       // 读取完成后
       if (event.target.readyState === FileReader.DONE) { // (0:FileReader.EMPTY, 1:FileReader.LOADING, 2:FileReader.DONE)
         // 这里使用七牛处理上传的图片，返回一个图片的url
         upload(file, (fileUrl) => {
-          const type = file.type.split('/')[0];
+          const type = file.type.split('/')[0]; // 获取上传文件的文件类型
+          // 上传的数组，数组项为对象，包括文件url、文件类型、文件名字
           const attachments = [{ fileUrl, type, name: file.name }];
+          // 发送消息
           this._sendMessage({ attachments });
         });
       }
@@ -263,7 +267,7 @@ InputArea.propTypes = {
 
 
 InputArea.defaultProps = {
-  sendMessage: undefined,
-  isRobotChat: false,
-  inviteData: undefined,
+  sendMessage: undefined, // 发送消息的处理函数
+  isRobotChat: false, // 是否和机器人聊天
+  inviteData: undefined, // 邀请相关信息
 };

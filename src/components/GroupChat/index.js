@@ -140,6 +140,7 @@ class GroupChat extends Component {
     const {
       allGroupChats,
     } = this.props;
+    // 依据群组id吗，获取群组
     const chatItem = allGroupChats && allGroupChats.get(this.chatId);
     // (产品设计) 当查找没加过的群，点击去没群内容，请求出群内容，避免不了解而加错群
     if (!chatItem) {
@@ -218,7 +219,8 @@ class GroupChat extends Component {
           chatType="groupChat"
           clickAvatar={user_id => this._clickPersonAvatar(user_id)}
         />
-        {/* 切换显示群组详情弹框 */}
+        
+        {/* 点击遮罩层隐藏群组详情弹框 */}
         { showGroupChatInfo && <div onClick={() => this._showGroupChatInfo(false)} className="groupChatInfoMask" />}
         {/* 群组详情弹框 */}
         { showGroupChatInfo && (
@@ -232,6 +234,7 @@ class GroupChat extends Component {
           updateListGroupName={updateListGroupName}
           chatId={this.chatId} />
         )}
+
         { chatItem ? (
           <InputArea
             inviteData={inviteData}

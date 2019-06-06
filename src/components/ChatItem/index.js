@@ -64,6 +64,7 @@ class ChatItem extends Component {
     );
   }
 
+  // 图片加载完成后的回调
   _onloadImg = () => {
     // TODO: just the latest image should scrollIntoView.
     clearTimeout(this._scrollIntoView);
@@ -116,13 +117,16 @@ class ChatItem extends Component {
 
   // 渲染上传的文件
   filesRender = attachments => attachments.map((attachment) => {
+    // 如果上传的是图片
     if (attachment.type === 'image') {
+      // 渲染图片
       return (
         <div className="image-render" key={attachment.fileUrl} onClick={() => { this._clickImage(attachment.fileUrl); }}>
           <img src={attachment.fileUrl} onLoad={this._onloadImg} />
         </div>
       );
     }
+    // 否则下载文件，(文件名 或 'unknown file')
     return (
       <a
         key={attachment.fileUrl}
@@ -141,12 +145,14 @@ class ChatItem extends Component {
     const {
       me, img, time, name, msg, clickAvatar, github_id
     } = this.props; // 父组件传递下来的，聊天对话框的必要信息
+    // 上传的文件
     let attachments = this.props.attachments;
     if (typeof attachments === 'string') {
+      // attachments是字符串，则格式化
       attachments = JSON.parse(attachments);
     }
     // TODO: reduce needless render
-    console.log('attachments in chatItem', attachments);
+    // console.log('attachments in chatItem', attachments);
 
     return (
       <div className="chat-item">
@@ -208,7 +214,7 @@ ChatItem.defaultProps = {
   time: undefined, // 发送时间
   clickAvatar: undefined, // 点击头像的处理函数
   msg: '', // 发送的聊天消息
-  attachments: '[]',
+  attachments: '[]', // 上传的文件的必要信息组成的数组
   github_id: null, // github_id
   shouldScrollIntoView: true,
   clickImage() {}, // 点击图片的处理函数

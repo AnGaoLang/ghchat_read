@@ -161,7 +161,7 @@ module.exports = (server) => {
         fn({ fuzzyMatchResult, searchUser: data.searchUser });
       });
 
-      // 获取七牛的token
+      // 获取七牛的token,以获取上传图片到七牛云存储空间的权限
       socket.on('getQiniuToken', async (fn) => {
         const uploadToken = await getUploadToken();
         return fn(uploadToken);
