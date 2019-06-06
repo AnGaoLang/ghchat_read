@@ -65,6 +65,7 @@ module.exports = (server) => {
 
       // 群聊发信息
       socket.on('sendGroupMsg', async (data) => {
+        console.log(data)
         if (!data) return;
         data.attachments = JSON.stringify(data.attachments);
         await groupChatModel.saveGroupMsg({ ...data });

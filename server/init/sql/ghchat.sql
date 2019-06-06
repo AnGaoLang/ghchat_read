@@ -48,7 +48,8 @@ CREATE TABLE `group_msg` (
   `to_group_id` char(100) NOT NULL DEFAULT '',
   `message` text NOT NULL,
   `time` int(11) NOT NULL,
-  `attachments` varchar(250) DEFAULT '''[]''',
+  `attachments` varchar(20845) DEFAULT '''[]''', 
+  -- attachments 从 255 改为 20845，attachments为attachments的字符串，可能超长
   PRIMARY KEY (`id`),
   KEY `to_group` (`to_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

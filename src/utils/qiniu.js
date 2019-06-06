@@ -40,7 +40,6 @@ export default async function upload(file, completeEvent) {
         // res.key上传到云对象存储后文件的名称。如下：外链域名+res.key 便是图片的网络绝对地址
 
         window.socket.emit('getQiniuPrivateUrl', res.key, function (res) {
-          debugger
           console.log(res)
           const fileUrl = res;
           completeEvent(fileUrl);
