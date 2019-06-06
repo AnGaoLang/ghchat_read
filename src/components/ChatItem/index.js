@@ -131,7 +131,7 @@ class ChatItem extends Component {
       <a
         key={attachment.fileUrl}
         download
-        href={`${attachment.fileUrl}?attname=${attachment.name}`}
+        href={attachment.fileUrl}
         className="other-file-render"
       >
         {attachment.name || 'unknown file'}

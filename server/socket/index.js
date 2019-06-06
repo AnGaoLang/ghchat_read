@@ -66,10 +66,10 @@ module.exports = (server) => {
       // 群聊发信息
       socket.on('sendGroupMsg', async (data) => {
         console.log(data)
-        if (!data) return;
-        data.attachments = JSON.stringify(data.attachments);
+        if (!data) return; // 没有消息可以发送则直接返回
+        data.attachments = JSON.stringify(data.attachments); // 将attachments转为json字符串存入数据库
         await groupChatModel.saveGroupMsg({ ...data });
-        socket.broadcast.to(data.to_group_id).emit('getGroupMsg', data);
+        socket.broadcast.to(data.to_group_id).emit('getGroupMsg', data); // 分发最新消息
         // logs to debug;
         console.log(`[userId:${_userId}, socketId:${socketId}] send group msg:${data} to to_group_id:${data.to_group_id}`);
       });
