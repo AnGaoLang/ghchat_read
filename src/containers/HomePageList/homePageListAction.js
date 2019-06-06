@@ -45,13 +45,16 @@ const updateHomePageListAction = ({
   };
 };
 
-
+// 更新群名的action
 const updateListGroupNameAction = ({
-  homePageList, name, to_group_id
+  homePageList, // 聊天列表
+  name, // 聊天列表里的群组名
+  to_group_id // 群组id
 }) => {
-  const homePageListCopy = [...List(homePageList)];
-  const goal = homePageListCopy.find(e => e.to_group_id === to_group_id);
-  goal.name = name;
+  const homePageListCopy = [...List(homePageList)]; // 拷贝一个homePageList
+  const goal = homePageListCopy.find(e => e.to_group_id === to_group_id); // 依据群组id找到相应的群组项
+  goal.name = name; // 更改名称
+  // 返还新的homePageListCopy
   return {
     type: UPDATE_LIST_GROUP_NAME,
     data: homePageListCopy

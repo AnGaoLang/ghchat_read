@@ -18,7 +18,8 @@ const query = (sql, values) => new Promise((resolve, reject) => {
         if (err) {
           reject(err);
         } else {
-          resolve(rows);
+          // console.log(rows)
+          resolve(rows); // 这里的rows是一个json，数组项为对象，该对象为当前行的字段和值的键值对
         }
         connection.release();
       });

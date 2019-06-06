@@ -28,8 +28,7 @@ const createGroup = (arr) => {
   return query(_sql, arr);
 };
 
-// 更新群信息
-
+// 更新群信息，群名和群公告
 const updateGroupInfo = ({ name, group_notice, to_group_id }) => {
   const _sql = 'UPDATE group_info SET name = ?, group_notice = ? WHERE to_group_id= ? limit 1 ; ';
   return query(_sql, [name, group_notice, to_group_id]);

@@ -20,7 +20,7 @@ const getGroupMsg = (groupId, start, count) => {
  */
 const getGroupMember = (groupId) => {
   const _sql = 'SELECT g.user_id, u.name, u.status, u.avatar, u.github_id, u.github, u.intro, u.company, u.location, u.website FROM group_user_relation AS g inner join user_info AS u ON g.user_id = u.id WHERE to_group_id = ?';
-  return query(_sql, groupId);
+  return query(_sql, groupId); // 返回额是一个promise
 };
 /**
  * 获取群资料

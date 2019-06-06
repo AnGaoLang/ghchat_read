@@ -32,6 +32,7 @@ class GroupChat extends Component {
   }
 
   sendMessage = (inputMsg = '', attachments = []) => {
+    console.log(attachments);
     if (inputMsg.trim() === '' && attachments.length === 0) return;
     const {
       user_id, avatar, name, github_id

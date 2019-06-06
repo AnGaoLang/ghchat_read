@@ -64,13 +64,17 @@ const addGroupMessageAndInfoAction = ({
   return { type: ADD_GROUP_MESSAGE_AND_INFO, data };
 };
 
+// 更新群公告的action
 const updateGroupTitleNoticeAction = ({
-  allGroupChats, groupNotice, groupName, groupId
+  allGroupChats, // 全部群组信息
+  groupNotice, // 群组公告
+  groupName, // 群组名
+  groupId // 群组id
 }) => {
-  const allGroupChatsCopy = new Map(allGroupChats);
-  const goalGroupChat = allGroupChatsCopy.get(groupId);
-  if (!goalGroupChat || !goalGroupChat.groupInfo) console.error('不存在此群的信息');
-  goalGroupChat.groupInfo = { ...goalGroupChat.groupInfo, group_notice: groupNotice, name: groupName };
+  const allGroupChatsCopy = new Map(allGroupChats); // 以allGroupChats为拷贝
+  const goalGroupChat = allGroupChatsCopy.get(groupId); // 以群组id获取相应群组的信息包括聊天消息
+  if (!goalGroupChat || !goalGroupChat.groupInfo) console.error('不存在此群的信息'); // 如果不存在，直接return
+  goalGroupChat.groupInfo = { ...goalGroupChat.groupInfo, group_notice: groupNotice, name: groupName }; // 更新群组相关信息，返还新的allGroupChats Map
   return { type: UPDATE_GROUP_TITLE_NOTICE, data: allGroupChatsCopy };
 };
 

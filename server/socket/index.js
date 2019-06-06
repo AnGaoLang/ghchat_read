@@ -10,7 +10,7 @@ const userInfoModel = require('../models/userInfo');
 const groupInfoModel = require('../models/groupInfo');
 const { getAllMessage, getGroupItem } = require('./message');
 const verify = require('../middlewares/verify');
-const getUploadToken = require('../utils/qiniu');
+const qiniu = require('../utils/qiniu');
 
 module.exports = (server) => {
   console.log(server)
@@ -161,10 +161,16 @@ module.exports = (server) => {
         fn({ fuzzyMatchResult, searchUser: data.searchUser });
       });
 
-      // 获取七牛的token,以获取上传图片到七牛云存储空间的权限
+      // 获取七牛的token,以获取上传图片到七牛云存储空间的token权限
       socket.on('getQiniuToken', async (fn) => {
-        const uploadToken = await getUploadToken();
+        const uploadToken = await qiniu.getUploadToken();
         return fn(uploadToken);
+      });
+
+      // 获取七牛的访问私有空间资源的url
+      socket.on('getQiniuPrivateUrl', async (key, fn) => {
+        const privateUrl = await qiniu.getPrivateUrl(key);
+        return fn(privateUrl);
       });
 
       /**

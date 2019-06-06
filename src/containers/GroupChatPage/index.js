@@ -42,9 +42,11 @@ const mapDispatchToProps = dispatch => ({
   deleteHomePageList(arg = {}) {
     dispatch(deleteHomePageListAction({ ...arg }));
   },
+  // 更新群公告
   updateGroupTitleNotice(arg = {}) {
     dispatch(updateGroupTitleNoticeAction({ ...arg }));
   },
+  // 更新群名
   updateListGroupName(arg = {}) {
     dispatch(updateListGroupNameAction({ ...arg }));
   },

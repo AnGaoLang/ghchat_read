@@ -47,7 +47,7 @@ export default class InputArea extends Component {
     console.log(attachments)
     // 没有输入消息则不发送消息
     const { inputMsg } = this.state;
-    if (!inputMsg) return;
+    if (!inputMsg && attachments.length == 0) return;
     // 有输入消息。
 
     const { sendMessage } = this.props;
@@ -131,6 +131,7 @@ export default class InputArea extends Component {
   // 上传文件
   _onSelectFile = (e) => {
     const file = e.target.files[0];
+    e.target.value = ''; // 清空还原input的value,便面多次上传同一文件而无法上传
     if (!file) {
       return;
     }
@@ -143,7 +144,7 @@ export default class InputArea extends Component {
         notification('发的文件不能超过2MB哦!', 'warn', 2);
         return;
       };
-
+      
       // 读取完成后
       if (event.target.readyState === FileReader.DONE) { // (0:FileReader.EMPTY, 1:FileReader.LOADING, 2:FileReader.DONE)
         // 这里使用七牛处理上传的图片，返回一个图片的url

@@ -8,6 +8,9 @@ export default async function upload(file, completeEvent) {
     const observer = {
       // 接收上传进度信息
       next(res) {
+        // console.log('上传的进度消息')
+        // console.log(res)
+
         // res.total.loaded: number，已上传大小，单位为字节。
         // res.total.total: number，本次上传的总量控制信息，单位为字节，注意这里的 total 跟文件大小并不一致。
         // res.total.percent: number，当前上传进度，范围：0～100。
@@ -17,6 +20,9 @@ export default async function upload(file, completeEvent) {
       // 当不是 xhr 请求错误时，会把当前错误产生原因直接抛出，诸如 JSON 解析异常等
       // 当产生 xhr 请求错误时，参数 err 包含 code、message、isRequestError 三个属性
       error(err) {
+        // console.log('错误')
+        // console.log(err)
+
         // err.isRequestError: 用于区分是否 xhr 请求错误；当 xhr 请求出现错误并且后端通过 HTTP 状态码返回了错误信息时，该参数为 true；否则为 undefined 。
         // err.reqId: string，xhr请求错误的 X-Reqid。
         // err.code: number，请求错误状态码，只有在 err.isRequestError 为 true 的时候才有效，可查阅码值对应说明。
@@ -26,11 +32,22 @@ export default async function upload(file, completeEvent) {
       },
       //接收上传完成后的后端返回信息
       complete(res) {
-        // res 参数为一个 object， 为上传成功后后端返回的信息
-        // console.log('qiniu observer complete', res);
-        const fileUrl = `https://cdn.aermin.top/${res.key}`;
+        // console.log('上传成功')
+        // console.log(res)
+        
+        // res 参数为一个 object， 为上传成功后返回的信息
+        // res.hash返回的图图片hash值
+        // res.key上传到云对象存储后文件的名称。如下：外链域名+res.key 便是图片的网络绝对地址
+
+        window.socket.emit('getQiniuPrivateUrl', res.key, function (res) {
+          debugger
+          console.log(res)
+          const fileUrl = res;
+          completeEvent(fileUrl);
+        })
+        // const fileUrl = `http://psnxqoglh.bkt.clouddn.com/${res.key}?&token=${uploadToken}`;
         // 返回图片上传的cdn地址
-        completeEvent(fileUrl);
+        
       }
     };
 

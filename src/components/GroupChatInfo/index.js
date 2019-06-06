@@ -22,7 +22,7 @@ export default class GroupChatInfo extends Component {
     const groupId = this.props.chatId;
     // 依据群组id获取群组内的所有成员
     window.socket.emit('getGroupMember', groupId, (data) => {
-      data.sort((a, b) => b.status - a.status); // 排序
+      data.sort((a, b) => b.status - a.status); // 在线的在前，不在线的在后
       const onlineMember = data.filter(e => e.status === 1); // 筛选出在线的成员
       this.setState({
         groupMember: data,
@@ -74,12 +74,14 @@ export default class GroupChatInfo extends Component {
   // 更新群资料；groupName：群名；groupNotice：群公告
   _updateGroupInfo = ({ groupName, groupNotice }) => {
     const {
-      groupInfo, allGroupChats,
+      groupInfo, 
+      allGroupChats,
       updateGroupTitleNotice,
       updateListGroupName,
       homePageList
     } = this.props;
-    const { to_group_id } = groupInfo;
+    const { to_group_id } = groupInfo; // 群组id
+    // 传入的参数，群组名，群组公告，群组id
     const data = {
       name: groupName,
       group_notice: groupNotice,
@@ -92,8 +94,8 @@ export default class GroupChatInfo extends Component {
       updateListGroupName({
         homePageList, name: groupName, to_group_id
       });
-      notification(res, 'success');
-      this._closeModal();
+      notification(res, 'success'); // "修改群资料成功"提示
+      this._closeModal(); // 关闭修改群资料modal
     });
   }
 
