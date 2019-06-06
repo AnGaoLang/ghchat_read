@@ -142,7 +142,7 @@ module.exports = (server) => {
         await groupInfoModel.leaveGroup(user_id, toGroupId);
       });
 
-      // 获取群成员信息
+      // 获取群成员信息，以群组id查找所有成员信息
       socket.on('getGroupMember', async (groupId, fn) => {
         const RowDataPacket = await groupChatModel.getGroupMember(groupId);
         const getGroupMember = JSON.parse(JSON.stringify(RowDataPacket));

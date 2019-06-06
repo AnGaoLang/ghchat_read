@@ -22,7 +22,7 @@ class GroupChat extends Component {
     this.state = {
       groupMsgAndInfo: {},
       showGroupChatInfo: false,
-      personalInfo: {},
+      personalInfo: {}, // 要显示的群组成员的详情信息
       showPersonalInfo: false, // 是否显示个人信息详情弹框
       showLeaveGroupModal: false, // 是否显示群组信息详情弹框
       showInviteModal: false // 是否显示邀请分享弹框
@@ -123,15 +123,18 @@ class GroupChat extends Component {
     this.setState({ showPersonalInfo: value });
   }
 
+  // 点击群组内成员，显示成员的详情modal
   _clickPersonAvatar = (user_id) => {
-    const { allGroupChats } = this.props;
-    const { members } = allGroupChats.get(this.chatId).groupInfo;
-    const personalInfo = members.filter(member => member.user_id === user_id)[0];
+    const { allGroupChats } = this.props; 
+    const { members } = allGroupChats.get(this.chatId).groupInfo; // 依据群组id，获取群组的详情信息内的members(群组成员)
+    const personalInfo = members.filter(member => member.user_id === user_id)[0]; // 依据传入的 user_id 筛选出被点击的群组成员的信息
+    // 如果不存在，则显示提示消息
     if (!personalInfo) {
       notification('此人已不在群中啦', 'warn', 1.5);
       return;
-    }
+    };
     this.setState({ personalInfo }, () => {
+      // 显示成员详情modal
       this._showPersonalInfo(true);
     });
   }
@@ -151,6 +154,7 @@ class GroupChat extends Component {
     this._didMount = true;
   }
 
+  // 获取当前群组id
   get chatId() {
     // eslint-disable-next-line react/prop-types
     return this.props.match.params.to_group_id;
@@ -164,8 +168,8 @@ class GroupChat extends Component {
   render() {
     const {
       allGroupChats,
-      updateGroupTitleNotice,
-      updateListGroupName,
+      updateGroupTitleNotice, // 父包装组件传递下来的dispatch
+      updateListGroupName, // 父包装组件传递下来的dispatch
       homePageList,
       inviteData,
     } = this.props;
@@ -206,10 +210,13 @@ class GroupChat extends Component {
           homePageList={homePageList}
           clickInviteModalItem={this._chat.clickInviteModalItem}
          />
+
+        {/* 群组成员的详情弹框 */}
         <PersonalInfo
           userInfo={personalInfo}
           hide={() => this._showPersonalInfo(false)}
           modalVisible={chatItem && showPersonalInfo} />
+          
         <ChatContentList
           chat={this._chat}
           chats={allGroupChats}
@@ -222,7 +229,7 @@ class GroupChat extends Component {
         
         {/* 点击遮罩层隐藏群组详情弹框 */}
         { showGroupChatInfo && <div onClick={() => this._showGroupChatInfo(false)} className="groupChatInfoMask" />}
-        {/* 群组详情弹框 */}
+        {/* 群组详情弹框 updateGroupTitleNotice、updateListGroupName 为父包装组件传递下来的dispatch*/}
         { showGroupChatInfo && (
         <GroupChatInfo
           groupInfo={groupInfo}
@@ -258,8 +265,8 @@ export default withRouter(GroupChat);
 
 
 GroupChat.propTypes = {
-  allGroupChats: PropTypes.instanceOf(Map),
-  homePageList: PropTypes.array,
+  allGroupChats: PropTypes.instanceOf(Map), // 以群组id为key，存储了该群组的详情信息以及所有聊天消息
+  homePageList: PropTypes.array, // 聊天列表所有聊天组的数组
   updateHomePageList: PropTypes.func,
   addGroupMessages: PropTypes.func,
   addGroupMessageAndInfo: PropTypes.func,
