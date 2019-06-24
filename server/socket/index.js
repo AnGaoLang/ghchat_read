@@ -28,7 +28,7 @@ module.exports = (server) => {
     const socketId = socket.id;
     let _userId;
     try {
-      socket.on('initSocket', async (user_id, fn) => {
+      socket.on('initSocket', async (user_id, fn) => { //这里的fun是前台传入的回调函数
         _userId = user_id;
         await socketModel.saveUserSocketId(user_id, socketId);
         await userInfoModel.updateUserStatus(user_id, 1);
@@ -74,19 +74,23 @@ module.exports = (server) => {
         console.log(`[userId:${_userId}, socketId:${socketId}] send group msg:${data} to to_group_id:${data.to_group_id}`);
       });
 
+      // 获取私人聊天的消息
       socket.on('getOnePrivateChatMessages', async (data, fn) => {
         const {
           user_id, toUser, start, count
         } = data;
+        // 依据当前用户id、私聊对象用户的id、起始位置索引、要查询的数据的数量 获取私聊内的聊天消息
         const RowDataPacket = await privateChatModel.getPrivateDetail(user_id, toUser, start - 1, count);
         const privateMessages = JSON.parse(JSON.stringify(RowDataPacket));
         console.log('getOnePrivateChatMessages: data, privateMessages', data, privateMessages);
         fn(privateMessages);
       });
 
-      // get group messages in a group;
+      // 获取群组内的聊天消息
       socket.on('getOneGroupMessages', async (data, fn) => {
+        // 依据群组id、起始位置索引、要查询的数据的数量 获取群组内的聊天消息
         const RowDataPacket = await groupChatModel.getGroupMsg(data.groupId, data.start - 1, data.count);
+        console.log(RowDataPacket);
         const groupMessages = JSON.parse(JSON.stringify(RowDataPacket));
         console.log('getOneGroupMessages: data, groupMessages', data, groupMessages);
         fn(groupMessages);

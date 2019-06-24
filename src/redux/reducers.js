@@ -14,6 +14,6 @@ export default combineReducers({
   allGroupChatsState: fetchAllGroupChatsReducer,
   allPrivateChatsState: fetchAllPrivateChatsReducer,
   relatedCurrentChat: relatedCurrentChatReducer,
-  initAppState: initAppReducer,
-  inviteState: inviteReducer,
+  initAppState: initAppReducer, // 初始化app相关信息
+  inviteState: inviteReducer, // 邀请相关必要信息{name(姓名),avatar(头像), user_id(用户id),to_group_id(群组id)}
 });

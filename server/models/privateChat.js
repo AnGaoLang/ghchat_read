@@ -16,7 +16,7 @@ const { query } = require('../utils/db');
  */
 const getPrivateDetail = (from_user, to_user, start, count) => {
   const data = [from_user, to_user, to_user, from_user, start, count];
-  const _sql = 'SELECT * FROM ( SELECT p.from_user,p.to_user,p.message,p.attachments,p.time,i.avatar,i.name,i.status, i.github_id from private_msg as p inner join user_info as i  on p.from_user = i.id  where  (p.from_user = ? AND p.to_user   = ? )  or (p.from_user = ? AND p.to_user   = ? )  order by time desc limit ?,? ) as n order by n.time';
+  const _sql = `SELECT * FROM ( SELECT p.from_user,p.to_user,p.message,p.attachments,p.time,i.avatar,i.name,i.status, i.github_id from private_msg as p inner join user_info as i  on p.from_user = i.id  where  (p.from_user = ? AND p.to_user   = ? )  or (p.from_user = ? AND p.to_user   = ? )  order by time desc limit ?,? ) as n order by n.time`;
   return query(_sql, data);
 };
 

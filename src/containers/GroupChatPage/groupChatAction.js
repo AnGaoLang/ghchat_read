@@ -15,7 +15,7 @@ const addGroupMessagesAction = ({
   allGroupChats, messages, message, groupId, inLazyLoading = false
 }) => {
   const allGroupChatsCopy = new Map(allGroupChats);
-  const goalGroupChat = allGroupChatsCopy.get(groupId);
+  const goalGroupChat = allGroupChatsCopy.get(groupId); // 依据群组id获取目标群组
   const originMessages = goalGroupChat && goalGroupChat.messages || [];
   const newMessages = messages || [message];
   if (goalGroupChat) {

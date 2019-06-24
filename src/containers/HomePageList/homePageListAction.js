@@ -98,6 +98,7 @@ const deleteHomePageListAction = ({
   };
 };
 
+// 依据chatFromId比对user_id、to_group_id，重置相应聊天框的所有未读消息为0
 const clearUnreadAction = ({ chatFromId, homePageList }) => {
   const homePageListCopy = [...List(homePageList)];
   const length = homePageListCopy.length;

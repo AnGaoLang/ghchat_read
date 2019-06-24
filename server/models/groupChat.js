@@ -1,6 +1,7 @@
 const {
   query
 } = require('../utils/db');
+
 /**
  * 获取群消息
  * @param  群id
@@ -10,18 +11,40 @@ const {
  *  @return  avatar  发送人头像
  */
 const getGroupMsg = (groupId, start, count) => {
-  const _sql = 'SELECT * FROM (SELECT g.message,g.attachments,g.time,g.from_user,g.to_group_id, i.avatar ,i.name, i.github_id FROM group_msg  As g inner join user_info AS i ON g.from_user = i.id  WHERE to_group_id = ? order by time desc limit ?,?) as n order by n.time; ';
+  // 子查询结果以时间为倒序，最后整个sql语句结果是从后往前查(时间较近先被返回)
+  const _sql = `SELECT * FROM 
+    (SELECT 
+      g.message,g.attachments,g.time,g.from_user,g.to_group_id, i.avatar ,i.name, i.github_id 
+    FROM group_msg  As g 
+    inner join 
+      user_info AS i 
+    ON 
+      g.from_user = i.id 
+    WHERE to_group_id = ? 
+    order by time desc 
+    limit ?,?)
+    as n 
+    order by n.time;`;
   return query(_sql, [groupId, start, count]);
 };
+
 /**
  * 获取群成员
  * @param   群id
  * @return  group_member_id  群成员id
  */
 const getGroupMember = (groupId) => {
-  const _sql = 'SELECT g.user_id, u.name, u.status, u.avatar, u.github_id, u.github, u.intro, u.company, u.location, u.website FROM group_user_relation AS g inner join user_info AS u ON g.user_id = u.id WHERE to_group_id = ?';
+  const _sql = `SELECT 
+      g.user_id, u.name, u.status, u.avatar, u.github_id, u.github, u.intro, u.company, u.location, u.website 
+    FROM group_user_relation AS g 
+    inner join 
+      user_info AS u 
+    ON 
+      g.user_id = u.id 
+    WHERE to_group_id = ?`;
   return query(_sql, groupId); // 返回额是一个promise
 };
+
 /**
  * 获取群资料
  * @param   arr 包括 groupId  groupName 至少一个
