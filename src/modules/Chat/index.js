@@ -7,9 +7,10 @@ import notification from '../../components/Notification';
 
 export default class Chat {
   constructor() {
-    this._hasLoadAllMessages = false;
+    this._hasLoadAllMessages = false; // 是否加载了全部消息
   }
 
+  // 点击加载分享弹框
   clickInviteModalItem = ({ homePageList, chatId }) => {
     const data = homePageList.filter(e => e.user_id === chatId || e.to_group_id === chatId);
     if (!data) {
@@ -23,6 +24,7 @@ export default class Chat {
     }));
   }
 
+  // 将聊天框滚动到最底部
   scrollToBottom(time = 0) {
     const ulDom = document.querySelector('.chat-content-list');
     if (ulDom) {
@@ -36,6 +38,7 @@ export default class Chat {
     store.dispatch(clearUnreadAction({ homePageList, chatFromId }));
   }
 
+  // 懒加载群组聊天消息
   lazyLoadGroupMessages({
     chats, chatId, start, count
   }) {
@@ -63,6 +66,7 @@ export default class Chat {
     });
   }
 
+  // 懒加载私人聊天消息
   lazyLoadPrivateChatMessages({
     chats, user_id, chatId, start, count
   }) {
@@ -85,6 +89,7 @@ export default class Chat {
     });
   }
 
+  // get 拦截isScrollInBottom属性的取值，依据聊天框是否滚动是否最底部，返回布尔值
   get isScrollInBottom() {
     const ulDom = document.getElementsByClassName('chat-content-list')[0];
     if (ulDom) {

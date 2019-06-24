@@ -17,7 +17,7 @@ import './styles.scss';
 class GroupChat extends Component {
   constructor(props) {
     super(props);
-    this._sendByMe = false;
+    this._sendByMe = false; // 是否为当前用户发送的消息
     this._userInfo = JSON.parse(localStorage.getItem('userInfo'));
     this.state = {
       groupMsgAndInfo: {},
@@ -48,7 +48,7 @@ class GroupChat extends Component {
       github_id,
       groupName: this.groupName,
       message: inputMsg === '' ? `${name}: [${attachments[0].type || 'file'}]` : `${name}: ${inputMsg}`, // 消息内容
-      attachments, // 附件
+      attachments, // 附件（图片或文件）
       to_group_id: this.chatId,
       time: Date.parse(new Date()) / 1000 // 时间
     };

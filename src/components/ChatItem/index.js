@@ -22,7 +22,7 @@ class ChatItem extends Component {
     this.props.history.push(redirectUrl);
   }
 
-  // 点击图片的处理函数
+  // 点击图片的处理函数(放大预览图片)
   _clickImage(imageUrl) {
     this.props.clickImage(imageUrl);
   }
