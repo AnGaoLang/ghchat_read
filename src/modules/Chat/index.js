@@ -82,10 +82,11 @@ export default class Chat {
   }) {
     return new Promise((resolve, reject) => {
       if (!this._hasLoadAllMessages) {
+        // 向后台发送消息（用户id，聊天id，起始位置索引，返回详细数量）;
         window.socket.emit('getOnePrivateChatMessages', {
           user_id, toUser: chatId, start, count
         }, (privateChatMessages) => {
-          if (privateChatMessages && privateChatMessages.length === 0) {
+          if (privateChatMessages && privateChatMessages.length === 0) { // 已加载所有私人消息
             this._hasLoadAllMessages = true;
             notification('已经到底啦', 'warn', 2);
             reject();

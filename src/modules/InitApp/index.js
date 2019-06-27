@@ -81,8 +81,11 @@ _listeningPrivateChatMsg = () => {
   });
 }
 
+// 监听群组消息
   _listeningGroupChatMsg = () => {
     window.socket.on('getGroupMsg', (data) => {
+      console.log('监听群组消息');
+      console.log(data);
       const { allGroupChatsState, homePageListState } = store.getState();
       // eslint-disable-next-line radix
       const chatId = window.location.pathname.split('/').slice(-1)[0];

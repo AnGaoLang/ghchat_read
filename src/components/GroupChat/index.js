@@ -88,15 +88,16 @@ class GroupChat extends Component {
     this.setState(state => ({ showLeaveGroupModal: !state.showLeaveGroupModal }));
   }
 
+  // 离开群组
   leaveGroup = () => {
     const { user_id } = this._userInfo;
     const {
       homePageList, deleteHomePageList, allGroupChats, deleteGroupChat
     } = this.props;
-    window.socket.emit('leaveGroup', { user_id, toGroupId: this.chatId });
-    deleteHomePageList({ homePageList, chatId: this.chatId });
-    deleteGroupChat({ allGroupChats, groupId: this.chatId });
-    this.props.history.push('/');
+    window.socket.emit('leaveGroup', { user_id, toGroupId: this.chatId }); // 向后台发送离开当前群组的消息
+    deleteHomePageList({ homePageList, chatId: this.chatId }); // 从homePageList中删除
+    deleteGroupChat({ allGroupChats, groupId: this.chatId }); // 从allGroupChats中删除
+    this.props.history.push('/'); // 跳到根目录i
   }
 
   _showGroupChatInfo(value) {

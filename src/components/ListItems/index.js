@@ -13,8 +13,8 @@ class ListItems extends Component {
   // 点击聊天列表，跳转到相应的路由，显示聊天详情
   // chatFromId: 聊天组的id； isGroupChat：是否是群组
   _clickItem = ({ chatFromId, isGroupChat }) => {
-    this.props.clickItem(chatFromId);
-    const chatUrl = isGroupChat ? `/group_chat/${chatFromId}` : `/private_chat/${chatFromId}`;
+    this.props.clickItem(chatFromId); // 根据chatFromId进行邀请
+    const chatUrl = isGroupChat ? `/group_chat/${chatFromId}` : `/private_chat/${chatFromId}`; // 跳转
     this.props.history.push(chatUrl);
   }
 
@@ -159,7 +159,7 @@ ListItems.defaultProps = {
   allGroupChats: new Map(), // 全部群组的的相关信息(包括群组自身信息，以及消息列表)
   dataList: [], // 聊天列表数组
   showRobot: false, // 是否显示机器人聊天列表
-  clickItem() {}, // 点击事件的触发函数
+  clickItem() {}, // 点击事件的触发函数（邀请的处理函数）
   isSearching: false, // 是否搜索
   showAsContacts: false // 是否在邀请弹框中，显示为相关联系人
 };

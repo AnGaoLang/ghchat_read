@@ -8,20 +8,22 @@ const setAllPrivateChatsAction = ({ data = new Map() }) => ({
   data
 });
 
+// 更新私人聊天信息
 const addPrivateChatMessagesAction = ({
   allPrivateChats, messages, message, chatId, inLazyLoading
 }) => {
-  const allPrivateChatsCopy = new Map(allPrivateChats);
-  const goalPrivateChat = allPrivateChatsCopy.get(chatId);
-  const originMessages = goalPrivateChat && goalPrivateChat.messages || [];
-  const newMessages = messages || [message];
-  if (goalPrivateChat) {
+  const allPrivateChatsCopy = new Map(allPrivateChats); // 复制allPrivateChats
+  const goalPrivateChat = allPrivateChatsCopy.get(chatId); // 依据chatId获取私人聊天
+  const originMessages = goalPrivateChat && goalPrivateChat.messages || [];// 获取私人的聊天消息
+  const newMessages = messages || [message]; // 新传入的消息，要么messages数组，要么单条 message
+  if (goalPrivateChat) { // goalPrivateChat存在
+    // 消息是否为懒加载，为真则将新加载的消息插入到原消息数组之前，反之则插入到原消息数组之后
     const finalMessages = inLazyLoading ? [...newMessages, ...originMessages] : [...originMessages, ...newMessages];
-    allPrivateChatsCopy.get(chatId).messages = finalMessages;
-  } else {
+    allPrivateChatsCopy.get(chatId).messages = finalMessages; // 更新allPrivateChatsCopy里的消息数组
+  } else {// goalPrivateChat不存在，表明当前私聊没有消息、直接将新消息插入
     allPrivateChatsCopy.set(chatId, { messages: newMessages });
   }
-  return { type: ADD_PRIVATE_CHAT_MESSAGES, data: allPrivateChatsCopy };
+  return { type: ADD_PRIVATE_CHAT_MESSAGES, data: allPrivateChatsCopy }; // 返回新的allPrivateChatsCopy
 };
 
 const addPrivateChatInfoAction = ({

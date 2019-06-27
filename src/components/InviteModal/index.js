@@ -15,6 +15,7 @@ import ListItems from '../ListItems';
 class InviteModal extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.state = {
       isSearching: false, // 是否搜索
       contactedItems: [], // 模糊搜索后的结果 
@@ -42,9 +43,9 @@ class InviteModal extends Component {
       const homePageListCopy = [...List(homePageList)];
       const fuse = new Fuse(homePageListCopy, this.filterOptions); // 从homePageList里进行模糊搜索
       const contactedItems = fuse.search(this._filedStr); // 模糊搜索的结果
-      this.setState({ isSearching: true, contactedItems }); // 更新contactedItems为糊搜索的结果
+      this.setState({ isSearching: true, contactedItems }); // 更新contactedItems为糊搜索的结果,搜索框内的内容为输入的内容
     } else {
-      this.setState({ isSearching: false });
+      this.setState({ isSearching: false }); // 清空搜索框
     }
   }
 
@@ -64,6 +65,7 @@ class InviteModal extends Component {
     return options;
   }
 
+  // 点击相关联系人的 ListItems 聊天列表，进行邀请
   _clickItemHandle = () => {
     const { clickInviteModalItem, homePageList, chatId } = this.props;
     clickInviteModalItem({ chatId, homePageList });
@@ -94,7 +96,7 @@ class InviteModal extends Component {
           showAsContacts
           clickItem={chatFromId => this._clickItemHandle(chatFromId)}
         />
-        {/* 底部的链接分享 */}
+        {/* 底部的链接分享(复制链接) */}
         <div className="shareInviteLink" onClick={this._copyInviteLink}>
           <svg className="icon shareIcon" aria-hidden="true"><use xlinkHref="#icon-share1" /></svg>
           复制链接分享给应用外的人
@@ -117,10 +119,10 @@ InviteModal.propTypes = {
 
 
 InviteModal.defaultProps = {
-  clickInviteModalItem() {},
-  homePageList: [],
-  allGroupChats: new Map(),
-  modalVisible: false,
-  cancel() {},
-  chatId: null,
+  clickInviteModalItem() {}, // 邀请的处理函数
+  homePageList: [], // 左侧聊天列表的相关关键信息
+  allGroupChats: new Map(), // 全部群组聊天
+  modalVisible: false, // 控制邀请弹框的显示和隐藏
+  cancel() {}, // 隐藏邀请弹框
+  chatId: null, // 当前的聊天id
 };

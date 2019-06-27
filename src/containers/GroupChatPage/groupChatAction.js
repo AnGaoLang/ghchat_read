@@ -11,20 +11,22 @@ const setAllGroupChatsAction = ({ data = new Map() }) => ({
   data
 });
 
+// 更新群组聊天信息
 const addGroupMessagesAction = ({
   allGroupChats, messages, message, groupId, inLazyLoading = false
 }) => {
-  const allGroupChatsCopy = new Map(allGroupChats);
+  const allGroupChatsCopy = new Map(allGroupChats); // 复制allGroupChats
   const goalGroupChat = allGroupChatsCopy.get(groupId); // 依据群组id获取目标群组
-  const originMessages = goalGroupChat && goalGroupChat.messages || [];
-  const newMessages = messages || [message];
-  if (goalGroupChat) {
+  const originMessages = goalGroupChat && goalGroupChat.messages || []; // 获取群组的聊天消息
+  const newMessages = messages || [message]; // 新插入的消息，要么是 messages 数组，或单条消息message
+  if (goalGroupChat) { // goalGroupChat存在
+    // 消息是否为懒加载，为真则将新加载的消息插入到原消息数组之前，反之则插入到原消息数组之后
     const finalMessages = inLazyLoading ? [...newMessages, ...originMessages] : [...originMessages, ...newMessages];
-    allGroupChatsCopy.get(groupId).messages = finalMessages;
-  } else {
+    allGroupChatsCopy.get(groupId).messages = finalMessages; // 更新allGroupChatsCopy里的消息数组
+  } else {// 若goalGroupChat不存在，表明当前群组没有消息、直接将新消息插入
     allGroupChatsCopy.set(groupId, { messages: newMessages });
   }
-  return { type: ADD_GROUP_MESSAGES, data: allGroupChatsCopy };
+  return { type: ADD_GROUP_MESSAGES, data: allGroupChatsCopy }; // 返回新的allGroupChats
 };
 
 const addGroupInfoAction = ({
