@@ -45,6 +45,7 @@ export default class ChatContentList extends Component {
     }
   }
 
+  // 懒加载消息
   _lazyLoadMessage = () => {
     this._executeNextLoad = false;
     const {
@@ -116,24 +117,27 @@ export default class ChatContentList extends Component {
 
   render() {
     const { ChatContent, clickAvatar } = this.props;
+    // map映射聊天列表
     const listItems = ChatContent.map((item, index) => {
       let isMe;
-      if (item.to_user) { // is private chat
-        isMe = this._userInfo && (this._userInfo.user_id === item.from_user);
-      } else if (item.to_group_id) { // is group chat
-        isMe = this._userInfo && (this._userInfo.user_id === item.from_user);
+      if (item.to_user) { // 私人聊天
+        isMe = this._userInfo && (this._userInfo.user_id === item.from_user); // 当前用户id
+      } else if (item.to_group_id) { // 群组聊天
+        isMe = this._userInfo && (this._userInfo.user_id === item.from_user); // 当前用户id
       }
       let message;
-      if (item.message) {
-        const beginWithName = /\S.*:\s/.test(item.message);
-        message = beginWithName ? item.message.substring(item.name.length + 2) : item.message;
+      if (item.message) { // 若存在消息
+        const beginWithName = /\S.*:\s/.test(item.message); // 正则匹配消息，包括用户名 "angaolang: 13243"
+        message = beginWithName ? item.message.substring(item.name.length + 2) : item.message; // 去除用户名,只保留消息
+        console.log(message)
       }
-      const time = toNormalTime(item.time);
+      const time = toNormalTime(item.time); // 格式化时间
       // console.log('item.attachments', item.attachments);
-      const attachments = item.attachments;
-      if (item.tip) {
+      const attachments = item.attachments; // 上传的图片或文件
+      if (item.tip) { // 若有tip，则直接渲染消息
         return <li className="tip" key={index}>{item.message}</li>;
       }
+      // 渲染消息列表
       return (
         <li key={index}>
           <ChatItem
