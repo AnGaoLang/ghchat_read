@@ -72,7 +72,7 @@ class ChatItem extends Component {
       const imgDom = document.querySelectorAll('.image-render');
       if (imgDom[imgDom.length - 1] && this.props.shouldScrollIntoView) {
         imgDom[imgDom.length - 1].scrollIntoView();
-        this._chat.scrollToBottom();
+        this._chat.scrollToBottom(); // 聊天列表滚动到最底部
       }
     }, 0);
   }

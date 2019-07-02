@@ -11,11 +11,12 @@ import notification from '../Notification';
 export default class ChatContentList extends Component {
   constructor(props) {
     super(props);
-    this._chat = props.chat;
-    this._scrollHeight = 0;
-    this._userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this._loadingNewMessages = false;
-    this._executeNextLoad = true;
+    this._chat = props.chat; // 从父组件传递下来的 Chat类的实例
+    this._scrollHeight = 0; // 聊天列表的高度
+    this._userInfo = JSON.parse(localStorage.getItem('userInfo')); // 获取当前用户信息
+    this._loadingNewMessages = false; // 是否加载新消息
+    this._executeNextLoad = true; // 是否进行下一次懒加载
+    // 预览图片
     this.state = {
       imageVisible: false,
       imageUrl: null
@@ -23,23 +24,28 @@ export default class ChatContentList extends Component {
   }
 
   componentDidMount() {
-    this._chat.scrollToBottom();
+    this._chat.scrollToBottom(); // 初始化聊天框时，自动滚动到最低部
   }
 
   componentWillUpdate() {
     // If It is the bottom of scroll just now, keep it in the bottom.
     if (this._chat.isScrollInBottom) {
+       // 每次将要视图更新时，都保持聊天列表保持在最底部
       this._chat.scrollToBottom();
     }
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.chatId !== this.props.chatId) { // go to another chat
+    console.log(this.props)
+    if (nextProps.chatId !== this.props.chatId) { // 点击侧边栏，去到了不同的群组或私人聊天
       this._loadingNewMessages = false;
       // this._chat = new Chat();
-      this._chat.scrollToBottom();
+      this._chat.scrollToBottom(); // 滚到最底部
     }
+    
+    console.log(this._scrollHeight)
     if (this._scrollHeight && this._loadingNewMessages) {
+      // this._ulRef为聊天列表外层url的dom对象
       this._ulRef.scrollTop = this._ulRef.scrollHeight - this._scrollHeight;
       this._loadingNewMessages = false;
     }
@@ -47,16 +53,21 @@ export default class ChatContentList extends Component {
 
   // 懒加载消息
   _lazyLoadMessage = () => {
-    this._executeNextLoad = false;
+    this._executeNextLoad = false; // 是否执行下一次懒加载
     const {
       chats, chatId, ChatContent, chatType
     } = this.props;
-    if (chatType === 'groupChat') {
+    if (chatType === 'groupChat') { // 群组聊天
+      // 调用Chat类的懒加载方法lazyLoadGroupMessages
       this._chat.lazyLoadGroupMessages({
-        chats, chatId, start: ChatContent.length + 1, count: 20
+        chats, 
+        chatId, 
+        start: ChatContent.length + 1, 
+        count: 20
       }).then(() => {
         this._executeNextLoad = true;
       }).catch((error) => {
+         // 懒加载报错
         if (error === 'try again later') {
           // 延迟3s后 this._executeNextLoad 改为true
           sleep(3000).then(() => {
@@ -64,7 +75,7 @@ export default class ChatContentList extends Component {
           });
         }
       });
-    } else if (chatType === 'privateChat') {
+    } else if (chatType === 'privateChat') { // 私人聊天
       this._chat.lazyLoadPrivateChatMessages({
         chats,
         user_id: this._userInfo.user_id,
@@ -74,6 +85,7 @@ export default class ChatContentList extends Component {
       }).then(() => {
         this._executeNextLoad = true;
       }).catch((error) => {
+         // 懒加载报错
         if (error === 'try again later') {
           sleep(3000).then(() => {
             this._executeNextLoad = true;
@@ -129,7 +141,7 @@ export default class ChatContentList extends Component {
       if (item.message) { // 若存在消息
         const beginWithName = /\S.*:\s/.test(item.message); // 正则匹配消息，包括用户名 "angaolang: 13243"
         message = beginWithName ? item.message.substring(item.name.length + 2) : item.message; // 去除用户名,只保留消息
-        console.log(message)
+        // console.log(message)
       }
       const time = toNormalTime(item.time); // 格式化时间
       // console.log('item.attachments', item.attachments);
@@ -158,7 +170,7 @@ export default class ChatContentList extends Component {
     return (
       <ul
         className="chat-content-list"
-        ref={(list) => { this._ulRef = list; }}
+        ref={(list) => { this._ulRef = list }}
         onScroll={this._onScroll}
       >
         {/* 图片放大预览 */}
@@ -180,16 +192,16 @@ ChatContentList.propTypes = {
   ChatContent: PropTypes.array,
   chatId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   clickAvatar: PropTypes.func,
-  chatType: PropTypes.string.isRequired,
+  chatType: PropTypes.string.isRequired, // 当前聊天的类型（群组/私人）
   chats: PropTypes.instanceOf(Map),
   shouldScrollToFetchData: PropTypes.bool,
 };
 
 
 ChatContentList.defaultProps = {
-  ChatContent: [],
-  chatId: null,
-  clickAvatar() {},
-  chats: new Map(),
-  shouldScrollToFetchData: true,
+  ChatContent: [], // 聊天消息组成的数组
+  chatId: null, // 当前聊天id
+  clickAvatar() {}, // 点击头像的事件函数
+  chats: new Map(), // 聊天列表的所有相关消息构成的Map
+  shouldScrollToFetchData: true, // 依据id是否能从chats中查找都相关的聊天信息
 };
