@@ -68,10 +68,10 @@ class ChatItem extends Component {
   _onloadImg = () => {
     // TODO: just the latest image should scrollIntoView.
     clearTimeout(this._scrollIntoView);
-    this._scrollIntoView = setTimeout(() => {
+    this.scrollIntoView = setTimeout(() => {
       const imgDom = document.querySelectorAll('.image-render');
-      if (imgDom[imgDom.length - 1] && this.props.shouldScrollIntoView) {
-        imgDom[imgDom.length - 1].scrollIntoView();
+      if (imgDom[imgDom.length - 1] && this.props.shouldScrollIntoView) { // imgDom[imgDom.length - 1] 最近的图片存在 且 是否应该滚进可是视口内
+        imgDom[imgDom.length - 1].scrollIntoView(); // 让最近的图片滚动到浏览器窗口的可视区域内。
         this._chat.scrollToBottom(); // 聊天列表滚动到最底部
       }
     }, 0);
@@ -110,7 +110,7 @@ class ChatItem extends Component {
               size={26}
               fallback={(emoji, props) => (emoji ? `:${emoji.short_names[0]}:` : props.emoji)} />
           )})
-    }
+        }
       </div>
     );
   };
@@ -173,7 +173,8 @@ class ChatItem extends Component {
             }
           </div>
         ) : (
-          <div className="otherchat">
+          // 其他人，非本用户发送的聊天消息
+          <div className="otherchat"> 
             <UserAvatar name={name} src={img} size="40" clickAvatar={clickAvatar} showLogo={!!github_id} />
             <div className="nt">
               {name && <span>{ name }</span>}
@@ -216,6 +217,6 @@ ChatItem.defaultProps = {
   msg: '', // 发送的聊天消息
   attachments: '[]', // 上传的文件的必要信息组成的数组
   github_id: null, // github_id
-  shouldScrollIntoView: true,
+  shouldScrollIntoView: true, // 是否应该让加载中的图片滚进到浏览器可见窗口内
   clickImage() {}, // 点击图片的处理函数
 };
