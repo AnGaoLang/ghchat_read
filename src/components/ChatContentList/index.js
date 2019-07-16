@@ -43,7 +43,6 @@ export default class ChatContentList extends Component {
       this._chat.scrollToBottom(); // 滚到最底部
     }
     
-    console.log(this._scrollHeight)
     if (this._scrollHeight && this._loadingNewMessages) {
       // this._ulRef为聊天列表外层url的dom对象
       this._ulRef.scrollTop = this._ulRef.scrollHeight - this._scrollHeight;
@@ -150,6 +149,8 @@ export default class ChatContentList extends Component {
         return <li className="tip" key={index}>{item.message}</li>;
       }
       // 渲染消息列表
+      // !(this._scrollHeight && this._loadingNewMessages) && !this._chat.isScrollInBottom
+      // 聊天列表的高度或是否加载新消息中至少一个为假，且当前聊天列表不在最底部
       return (
         <li key={index}>
           <ChatItem

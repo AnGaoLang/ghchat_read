@@ -14,7 +14,9 @@ class ChatItem extends Component {
   constructor(props) {
     super(props);
     this._scrollIntoView = null;
-    this._chat = new Chat();
+    // 这里实例了一个Chat类，
+    // 仅使用了scrollToBottom方法让聊天框滚动到最底部
+    this._chat = new Chat(); 
   }
 
   // 点击邀请链接跳转
@@ -67,10 +69,12 @@ class ChatItem extends Component {
   // 图片加载完成后的回调
   _onloadImg = () => {
     // TODO: just the latest image should scrollIntoView.
+    // 清除堆积的setTimeout，仅让最后一张图片滚入视口
     clearTimeout(this._scrollIntoView);
     this.scrollIntoView = setTimeout(() => {
       const imgDom = document.querySelectorAll('.image-render');
-      if (imgDom[imgDom.length - 1] && this.props.shouldScrollIntoView) { // imgDom[imgDom.length - 1] 最近的图片存在 且 是否应该滚进可是视口内
+       // imgDom最近的图片存在 且 是否可以滚进可是视口内(父组件传递)
+      if (imgDom[imgDom.length - 1] && this.props.shouldScrollIntoView) {
         imgDom[imgDom.length - 1].scrollIntoView(); // 让最近的图片滚动到浏览器窗口的可视区域内。
         this._chat.scrollToBottom(); // 聊天列表滚动到最底部
       }
