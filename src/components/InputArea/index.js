@@ -34,9 +34,9 @@ export default class InputArea extends Component {
   }
 
   componentDidMount() {
-    if (this.props.inviteData) {
-      this._sendMessage({ message: (`::invite::${JSON.stringify(this.props.inviteData)}`) });
-      store.dispatch(inviteAction(null));
+    if (this.props.inviteData) { // 如果父组件传入了邀请相关信息
+      this._sendMessage({ message: (`::invite::${JSON.stringify(this.props.inviteData)}`) }); // 则以聊天消息的形式发送邀请
+      store.dispatch(inviteAction(null));  // 分发inviteAction
     };
     this.nameInput.focus(); // 聚焦textarea
   }
@@ -271,4 +271,5 @@ InputArea.defaultProps = {
   sendMessage: undefined, // 发送消息的处理函数
   isRobotChat: false, // 是否和机器人聊天
   inviteData: undefined, // 邀请相关信息
+  groupMembers: [], // 群组内所有成员组成的数组
 };

@@ -18,7 +18,7 @@ class GroupChat extends Component {
   constructor(props) {
     super(props);
     this._sendByMe = false; // 是否为当前用户发送的消息
-    this._userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    this._userInfo = JSON.parse(localStorage.getItem('userInfo')); // 当前用户的信息
     this.state = {
       groupMsgAndInfo: {},
       showGroupChatInfo: false,
@@ -27,13 +27,14 @@ class GroupChat extends Component {
       showLeaveGroupModal: false, // 是否显示群组信息详情弹框
       showInviteModal: false // 是否显示邀请分享弹框
     };
-    this._chat = new Chat();
-    this._didMount = false;
+    this._chat = new Chat(); // 实例化Chat聊天类
+    this._didMount = false; // 页面是否挂载完成
   }
 
-  sendMessage = (inputMsg = '', attachments = []) => {
-    console.log(attachments);
+  sendMessage = (inputMsg = '', attachments = []) => { // 发送的文本消息(inputMsg)、图片、文件(attachments)
+     // 去除文件消息的空字符串仍未空字符传 且 未上传图片或文件，直接返回
     if (inputMsg.trim() === '' && attachments.length === 0) return;
+    // 取出用户id， 头像， 昵称，github_id
     const {
       user_id, avatar, name, github_id
     } = this._userInfo;
@@ -46,29 +47,32 @@ class GroupChat extends Component {
       avatar, // 自己的头像
       name,
       github_id,
-      groupName: this.groupName,
-      message: inputMsg === '' ? `${name}: [${attachments[0].type || 'file'}]` : `${name}: ${inputMsg}`, // 消息内容
+      groupName: this.groupName, // 群组名称
+      message: inputMsg === '' ? `${name}: [${attachments[0].type || 'file'}]` : `${name}: ${inputMsg}`, // 消息内容，消息为空则为图片或文件
       attachments, // 附件（图片或文件）
-      to_group_id: this.chatId,
-      time: Date.parse(new Date()) / 1000 // 时间
+      to_group_id: this.chatId, //群组id
+      time: Date.parse(new Date()) / 1000 // 当前时间发送
     };
-    this._sendByMe = true;
-    window.socket.emit('sendGroupMsg', data);
-    addGroupMessages({ allGroupChats, message: data, groupId: this.chatId });
-    updateHomePageList({ data, homePageList, myUserId: user_id });
+    this._sendByMe = true; // 当前用户发送的消息
+    window.socket.emit('sendGroupMsg', data); // 向后台传递群组消息
+    addGroupMessages({ allGroupChats, message: data, groupId: this.chatId }); // 添加新的群组消息
+    updateHomePageList({ data, homePageList, myUserId: user_id }); // 更新左侧用户群组列表的显示的最新消息
   }
 
+  // 加入群组
   joinGroup = () => {
     const {
       allGroupChats, homePageList, updateHomePageList, addGroupMessageAndInfo
     } = this.props;
+    // 向后台发送加入群组的消息，并带上当前用户信息、要加入的群组id。
     window.socket.emit('joinGroup', { userInfo: this._userInfo, toGroupId: this.chatId }, (data) => {
-      const { messages, groupInfo } = data;
+      const { messages, groupInfo } = data; // 获取最新消息和群组信息
       const name = groupInfo && groupInfo.name;
       let lastContent;
       if (messages.length > 1) {
         lastContent = { ...messages[messages.length - 1], name };
       } else {
+        // 加入群组后，显示最新的加入成功消息
         lastContent = {
           ...data.groupInfo,
           message: '加入群成功，开始聊天吧:)',
@@ -78,7 +82,7 @@ class GroupChat extends Component {
       addGroupMessageAndInfo({
         allGroupChats, messages, groupId: this.chatId, groupInfo
       });
-      updateHomePageList({ data: lastContent, homePageList });
+      updateHomePageList({ data: lastContent, homePageList }); // 更新homPageilist
     }
     );
   }
@@ -145,7 +149,7 @@ class GroupChat extends Component {
     const {
       allGroupChats,
     } = this.props;
-    // 依据群组id吗，获取群组
+    // 依据群组id，获取当前群组，据此判断当前用户是否为该群组内的成员
     const chatItem = allGroupChats && allGroupChats.get(this.chatId);
     // (产品设计) 当查找没加过的群，点击去没群内容，请求出群内容，避免不了解而加错群
     if (!chatItem) {
@@ -182,7 +186,7 @@ class GroupChat extends Component {
       showInviteModal
     } = this.state;
     if (!allGroupChats && !allGroupChats.size) return null;
-    const chatItem = allGroupChats.get(this.chatId);
+    const chatItem = allGroupChats.get(this.chatId); // 依据群组id，获取当前群组，据此判断当前用户是否为该群组内的成员
     const messages = chatItem ? chatItem.messages : groupMsgAndInfo.messages;
     const groupInfo = chatItem ? chatItem.groupInfo : groupMsgAndInfo.groupInfo;
     return (
@@ -244,6 +248,7 @@ class GroupChat extends Component {
           chatId={this.chatId} />
         )}
 
+        {/* chatItem为真则渲染输入框，为假则渲染加入群组的按钮 */}
         { chatItem ? (
           <InputArea
             inviteData={inviteData}
@@ -269,26 +274,26 @@ export default withRouter(GroupChat);
 GroupChat.propTypes = {
   allGroupChats: PropTypes.instanceOf(Map), // 以群组id为key，存储了该群组的详情信息以及所有聊天消息
   homePageList: PropTypes.array, // 聊天列表所有聊天组的数组
-  updateHomePageList: PropTypes.func,
-  addGroupMessages: PropTypes.func,
+  updateHomePageList: PropTypes.func, // 更新左侧的用户群组列表的相关信息
+  addGroupMessages: PropTypes.func, // 新增群组消息
   addGroupMessageAndInfo: PropTypes.func,
-  deleteHomePageList: PropTypes.func,
-  deleteGroupChat: PropTypes.func,
+  deleteHomePageList: PropTypes.func, // 删除左侧指定chatId的用户群组列表
+  deleteGroupChat: PropTypes.func, // 删除指定groupId的群组聊天
   updateGroupTitleNotice: PropTypes.func,
   updateListGroupName: PropTypes.func,
-  inviteData: PropTypes.object,
+  inviteData: PropTypes.object, // 邀请相关数据
 };
 
 
 GroupChat.defaultProps = {
-  allGroupChats: new Map(),
-  homePageList: [],
-  updateHomePageList() {},
-  addGroupMessages() {},
+  allGroupChats: new Map(), // 以群组id为key，存储了该群组的详情信息以及所有聊天消息
+  homePageList: [], // 聊天列表所有聊天组的数组，即左侧的用户群组列表
+  updateHomePageList() {}, // 更新左侧的用户群组列表的相关信息
+  addGroupMessages() {}, // 新增群组消息
   addGroupMessageAndInfo() {},
-  deleteHomePageList() {},
-  deleteGroupChat() {},
+  deleteHomePageList() {}, // 删除左侧指定chatId的用户群组列表
+  deleteGroupChat() {}, // 删除指定groupId的群组聊天
   updateGroupTitleNotice() {},
   updateListGroupName() {},
-  inviteData: undefined,
+  inviteData: undefined, // 邀请相关数据
 };
