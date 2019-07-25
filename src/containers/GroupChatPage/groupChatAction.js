@@ -5,17 +5,17 @@ const DELETE_GROUP_CHAT = 'DELETE_GROUP_CHAT';
 const ADD_GROUP_MESSAGE_AND_INFO = 'ADD_GROUP_MESSAGE_AND_INFO';
 const UPDATE_GROUP_TITLE_NOTICE = 'UPDATE_GROUP_TITLE_NOTICE';
 
-// 设置全部群组聊天的action，包括 群组本身的信息，以及所有的消息列表
+// 设置全部群组聊天的action，包括 群组本身的信息和聊天消息
 const setAllGroupChatsAction = ({ data = new Map() }) => ({
   type: SET_ALL_GROUP_CHATS,
   data
 });
 
-// 更新群组聊天信息
+// 新增群组聊天信息
 const addGroupMessagesAction = ({
   allGroupChats, messages, message, groupId, inLazyLoading = false
 }) => {
-  const allGroupChatsCopy = new Map(allGroupChats); // 复制allGroupChats
+  const allGroupChatsCopy = new Map(allGroupChats); // 复制当前allGroupChats
   const goalGroupChat = allGroupChatsCopy.get(groupId); // 依据群组id获取目标群组
   const originMessages = goalGroupChat && goalGroupChat.messages || []; // 获取群组的聊天消息
   const newMessages = messages || [message]; // 新插入的消息，要么是 messages 数组，或单条消息message
@@ -29,17 +29,20 @@ const addGroupMessagesAction = ({
   return { type: ADD_GROUP_MESSAGES, data: allGroupChatsCopy }; // 返回新的allGroupChats
 };
 
+// 添加群组自身信息
 const addGroupInfoAction = ({
   allGroupChats, member,
   members, groupId, groupInfo,
 }) => {
   const membersArg = members || [member];
-  const allGroupChatsCopy = new Map(allGroupChats);
-  const goalGroupChat = allGroupChatsCopy.get(groupId);
-  const originGroupInfo = goalGroupChat && goalGroupChat.groupInfo || {};
-  const originMembers = originGroupInfo && originGroupInfo.members || [];
-  const newGroupMembers = originMembers.filter(m => m.user_id === (member && member.user_id)).length === 0
+  const allGroupChatsCopy = new Map(allGroupChats); // 复制当前allGroupChats
+  const goalGroupChat = allGroupChatsCopy.get(groupId); // 依据当前群组id获取群组信息及聊天消息
+  const originGroupInfo = goalGroupChat && goalGroupChat.groupInfo || {}; // 获取群组信息，没有则返回{}
+  const originMembers = originGroupInfo && originGroupInfo.members || []; // 获取群组成员，没有则返回{}
+  // 依据传入的 member 判断是否为当前群组的成员，若是不在当前群组，则将加进当前群组，若在，则直接返回当前群组的成员
+  const newGroupMembers = originMembers.filter(m => m.user_id === (member && member.user_id)).length === 0 // 筛选不出内容，表示不存在
     ? [...originMembers, ...membersArg] : originMembers;
+  // 若传入了groupInfo，则直接使用传入的新的群组信息，否则更新群组的成员
   const newGroupInfo = groupInfo || { ...originGroupInfo, members: newGroupMembers };
   if (goalGroupChat) {
     allGroupChatsCopy.get(groupId).groupInfo = newGroupInfo;

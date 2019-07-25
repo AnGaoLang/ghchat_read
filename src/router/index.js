@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import loadable from '@loadable/component';
+import loadable from '@loadable/component'; // 一个动态导入加载组件的高阶组件.
 import Tabs from '../components/Tabs';
 
 function MainView(props) { // 左侧的视图
