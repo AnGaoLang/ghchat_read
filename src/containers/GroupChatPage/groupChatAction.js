@@ -44,21 +44,24 @@ const addGroupInfoAction = ({
     ? [...originMembers, ...membersArg] : originMembers;
   // 若传入了groupInfo，则直接使用传入的新的群组信息，否则更新群组的成员
   const newGroupInfo = groupInfo || { ...originGroupInfo, members: newGroupMembers };
-  if (goalGroupChat) {
+  if (goalGroupChat) { // goalGroupChat 存在
     allGroupChatsCopy.get(groupId).groupInfo = newGroupInfo;
-  } else {
-    allGroupChatsCopy.set(groupId, { groupInfo: newGroupInfo });
+  } else {// goalGroupChat 不存在
+    allGroupChatsCopy.set(groupId, { groupInfo: newGroupInfo }); // 以群组id为键设置新的groupInfo
   }
   return { type: ADD_GROUP_INFO, data: allGroupChatsCopy };
 };
 
+// 新增群组自身信息 和 聊天信息
 const addGroupMessageAndInfoAction = ({
   allGroupChats, groupId, messages, message, member,
   members, groupInfo
 }) => {
+  // 新增群组聊天消息
   const res = addGroupMessagesAction({
     allGroupChats, groupId, messages, message
   });
+  // 新增群组自身信息
   const { data } = addGroupInfoAction({
     allGroupChats: res.data,
     groupId,
@@ -69,7 +72,7 @@ const addGroupMessageAndInfoAction = ({
   return { type: ADD_GROUP_MESSAGE_AND_INFO, data };
 };
 
-// 更新群公告的action
+// 更新群名和群公告
 const updateGroupTitleNoticeAction = ({
   allGroupChats, // 全部群组信息
   groupNotice, // 群组公告
@@ -83,13 +86,14 @@ const updateGroupTitleNoticeAction = ({
   return { type: UPDATE_GROUP_TITLE_NOTICE, data: allGroupChatsCopy };
 };
 
+// 删除群信息及聊天
 const deleteGroupChatAction = ({
   allGroupChats, groupId
 }) => {
-  const allGroupChatsCopy = new Map(allGroupChats);
-  const goalGroupChat = allGroupChatsCopy.get(groupId);
-  if (goalGroupChat) {
-    allGroupChatsCopy.delete(groupId);
+  const allGroupChatsCopy = new Map(allGroupChats); // 复制allGroupChats
+  const goalGroupChat = allGroupChatsCopy.get(groupId); // 以群组id拿到群组信息
+  if (goalGroupChat) { // 如果能拿到群组信息
+    allGroupChatsCopy.delete(groupId); // 直接删除相关信息
   }
   return { type: DELETE_GROUP_CHAT, data: allGroupChatsCopy };
 };
