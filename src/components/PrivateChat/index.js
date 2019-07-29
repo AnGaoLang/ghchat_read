@@ -32,17 +32,17 @@ export default class PrivateChat extends Component {
       updateHomePageList, addPrivateChatMessages,
     } = this.props;
     const data = {
-      from_user: user_id, // 自己的id
+      from_user: user_id, // 当前用户的id
       to_user: this.friendId, // 对方id
       avatar, // 自己的头像
-      name,
+      name, // 姓名
       github_id,
       message: inputMsg === '' ? `${name}: [${attachments[0].type || 'file'}]` : `${name}: ${inputMsg}`, // 消息内容
       attachments, // 附件
       time: Date.parse(new Date()) / 1000 // 时间
     };
     this._sendByMe = true;
-    window.socket.emit('sendPrivateMsg', data);
+    window.socket.emit('sendPrivateMsg', data); // 向后台发送聊天消息
     addPrivateChatMessages({
       allPrivateChats, message: data, chatId: this.friendId
     });
