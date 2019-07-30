@@ -112,9 +112,10 @@ class GroupChat extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { relatedCurrentChat, match } = nextProps;
+    // 新消息属于当前聊天 || 当前页面路由里的to_group_id改变了 || 消息是我发的
     if (relatedCurrentChat || match.params.to_group_id !== this.chatId || this._sendByMe) {
-      this._sendByMe = false;
-      return true;
+      this._sendByMe = false; // 则改变 _sendByMe 状态
+      return true; // 重新渲染页面
     }
 
     const { showGroupChatInfo, showPersonalInfo, showLeaveGroupModal } = nextState;
@@ -123,7 +124,7 @@ class GroupChat extends Component {
        || showLeaveGroupModal !== this.state.showLeaveGroupModal
     ) return true;
 
-    return false;
+    return false; // 阻止页面重渲
   }
 
   // 根据value，切换显示个人信息详情弹框
