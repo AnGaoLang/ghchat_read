@@ -79,6 +79,7 @@ const showCallMeTipAction = ({ homePageList, showCallMeTip, chatFromId }) => { /
   };
 };
 
+// 依据 chatId 删除 homePageList 的 action
 const deleteHomePageListAction = ({
   homePageList, chatId
 }) => {
@@ -87,7 +88,7 @@ const deleteHomePageListAction = ({
   for (let i = 0; i < length; i++) {
     const { to_group_id, user_id } = homePageListCopy[i];
     const id = to_group_id || user_id;
-    if (chatId === id) {
+    if (chatId === id) { // 依据 chatId 删除相应的数组项
       homePageListCopy.splice(i, 1);
       break;
     }
@@ -116,11 +117,13 @@ const clearUnreadAction = ({ chatFromId, homePageList }) => {
   };
 };
 
+// 覆写HomePageList
 const setHomePageListAction = (homePageList = []) => ({
   type: SET_HOME_PAGE_LIST,
   data: homePageList
 });
 
+// 当前的聊天是否是目标聊天对象
 const relatedCurrentChatAction = isRelatedCurrentChat => ({
   type: RELATED_CURRENT_CHAT,
   data: isRelatedCurrentChat

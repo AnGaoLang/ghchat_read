@@ -13,7 +13,7 @@ export default combineReducers({
   homePageListState: getHomePageListReducer, // 左侧聊天列表的state
   allGroupChatsState: fetchAllGroupChatsReducer, // 所有群组及聊天相关信息的state
   allPrivateChatsState: fetchAllPrivateChatsReducer, // 所有私人及聊天相关信息的state
-  relatedCurrentChat: relatedCurrentChatReducer,
+  relatedCurrentChat: relatedCurrentChatReducer, // 新消息是否属于当前聊天对象或群组
   initAppState: initAppReducer, // 初始化app相关信息
   inviteState: inviteReducer, // 邀请相关必要信息{name(姓名),avatar(头像), user_id(用户id),to_group_id(群组id)}
 });

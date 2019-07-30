@@ -34,10 +34,11 @@ const savePrivateMsg = ({
   from_user, to_user, message, time, attachments
 }) => {
   const data = [from_user, to_user, message, time, attachments];
-  const _sql = ' INSERT INTO private_msg(from_user,to_user,message,time,attachments)  VALUES(?,?,?,?,?); ';
+  const _sql = ' INSERT INTO private_msg (from_user,to_user,message,time,attachments) VALUES (?,?,?,?,?); ';
   return query(_sql, data);
 };
 
+// 获得未读消息的数量
 const getUnreadCount = ({ sortTime, from_user, to_user }) => {
   const data = [sortTime, from_user, to_user, to_user, from_user];
   const _sql = 'SELECT count(time) as unread FROM private_msg AS p WHERE p.time > ? and ((p.from_user = ? and p.to_user= ?) or (p.from_user = ? and p.to_user=?));';

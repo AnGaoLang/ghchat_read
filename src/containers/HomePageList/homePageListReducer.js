@@ -8,6 +8,7 @@ import {
 
 // 从localstorage中获取用户信息
 const userInfo = JSON.parse(localStorage.getItem('userInfo')); 
+// HomePageList的reducer
 const getHomePageListReducer = (previousState = [], action) => {
   switch (action.type) {
     case SET_HOME_PAGE_LIST:
@@ -27,6 +28,7 @@ const getHomePageListReducer = (previousState = [], action) => {
   }
 };
 
+// relatedCurrentChat 的reducer
 const relatedCurrentChatReducer = (previousState = true, action) => {
   switch (action.type) {
     case RELATED_CURRENT_CHAT:

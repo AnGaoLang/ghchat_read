@@ -3,6 +3,7 @@ const ADD_PRIVATE_CHAT_MESSAGES = 'ADD_PRIVATE_CHAT_MESSAGES';
 const ADD_PRIVATE_INFO = 'ADD_PRIVATE_INFO';
 const ADD_PRIVATE_CHAT_MESSAGE_AND_INFO = 'ADD_PRIVATE_CHAT_MESSAGE_AND_INFO';
 
+// 复写全局 allPrivateChats
 const setAllPrivateChatsAction = ({ data = new Map() }) => ({
   type: SET_ALL_PRIVATE_CHATS,
   data

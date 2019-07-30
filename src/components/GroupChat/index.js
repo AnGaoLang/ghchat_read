@@ -45,7 +45,7 @@ class GroupChat extends Component {
     const data = {
       from_user: user_id, // 自己的id
       avatar, // 自己的头像
-      name,
+      name, // 昵称
       github_id,
       groupName: this.groupName, // 群组名称
       message: inputMsg === '' ? `${name}: [${attachments[0].type || 'file'}]` : `${name}: ${inputMsg}`, // 消息内容，消息为空则为图片或文件
@@ -67,10 +67,10 @@ class GroupChat extends Component {
     // 向后台发送加入群组的消息，并带上当前用户信息、要加入的群组id。
     window.socket.emit('joinGroup', { userInfo: this._userInfo, toGroupId: this.chatId }, (data) => {
       const { messages, groupInfo } = data; // 获取最新消息和群组信息
-      const name = groupInfo && groupInfo.name;
-      let lastContent;
+      const name = groupInfo && groupInfo.name; // 群组名称
+      let lastContent; // 最新消息
       if (messages.length > 1) {
-        lastContent = { ...messages[messages.length - 1], name };
+        lastContent = { ...messages[messages.length - 1], name }; // 已加入群组，则更新最新消息
       } else {
         // 加入群组后，显示最新的加入成功消息
         lastContent = {
@@ -79,6 +79,7 @@ class GroupChat extends Component {
           time: Date.parse(new Date()) / 1000
         };
       }
+      // 添加群组信息及聊天消息
       addGroupMessageAndInfo({
         allGroupChats, messages, groupId: this.chatId, groupInfo
       });
@@ -104,6 +105,7 @@ class GroupChat extends Component {
     this.props.history.push('/'); // 跳到根目录i
   }
 
+  // 更改群组详情弹框显示状态
   _showGroupChatInfo(value) {
     this.setState({ showGroupChatInfo: value });
   }

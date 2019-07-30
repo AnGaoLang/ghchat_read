@@ -54,11 +54,11 @@ module.exports = (server) => {
       // 私聊发信息
       socket.on('sendPrivateMsg', async (data) => {
         if (!data) return;
-        data.attachments = JSON.stringify(data.attachments);
-        await privateChatModel.savePrivateMsg({ ...data });
-        const arr = await socketModel.getUserSocketId(data.to_user);
-        const toUserSocketId = JSON.parse(JSON.stringify(arr[0])).socketid;
-        io.to(toUserSocketId).emit('getPrivateMsg', data);
+        data.attachments = JSON.stringify(data.attachments); // 获取前台上传的图片或文件
+        await privateChatModel.savePrivateMsg({ ...data }); // 数据库存入私聊消息
+        const arr = await socketModel.getUserSocketId(data.to_user); 
+        const toUserSocketId = JSON.parse(JSON.stringify(arr[0])).socketid; // 获得socketid
+        io.to(toUserSocketId).emit('getPrivateMsg', data);  // 依据 socketid 分发 getPrivateMsg(获取私聊信息)
         // logs to debug;
         console.log(`[userId:${_userId}, socketId:${socketId}] send private msg to [userId:${data.to_user}, socketId:${toUserSocketId}]`);
       });
@@ -68,7 +68,7 @@ module.exports = (server) => {
         console.log(data)
         if (!data) return; // 没有消息可以发送则直接返回
         data.attachments = JSON.stringify(data.attachments); // 将attachments转为json字符串存入数据库
-        await groupChatModel.saveGroupMsg({ ...data });
+        await groupChatModel.saveGroupMsg({ ...data }); // 数据库存入最新群组消息
         socket.broadcast.to(data.to_group_id).emit('getGroupMsg', data); // 分发最新消息
         // logs to debug;
         console.log(`[userId:${_userId}, socketId:${socketId}] send group msg:${data} to to_group_id:${data.to_group_id}`);
