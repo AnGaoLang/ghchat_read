@@ -127,17 +127,34 @@ module.exports = (server) => {
 
       // 加群
       socket.on('joinGroup', async (data, fn) => {
-        const { userInfo, toGroupId } = data;
-        await groupInfoModel.joinGroup(userInfo.user_id, toGroupId);
-        socket.join(toGroupId);
-        const groupItem = await getGroupItem({ groupId: toGroupId });
-        fn(groupItem);
-        socket.broadcast.to(toGroupId).emit('getGroupMsg', {
-          ...userInfo,
-          message: `${userInfo.name}加入了群聊`,
-          to_group_id: toGroupId,
-          tip: 'joinGroup'
-        });
+        try {
+          const { userInfo, toGroupId } = data;
+          await groupInfoModel.joinGroup(userInfo.user_id, toGroupId);
+  
+          const joinedThisGroup = (await groupInfoModel.isInGroup(userInfo.user_id, toGroupId)).length;
+          if (!joinedThisGroup) {
+            await groupInfoModel.joinGroup(userInfo.user_id, toGroupId);
+            socket.broadcast.to(toGroupId).emit('getGroupMsg', {
+              ...userInfo,
+              message: `${userInfo.name}加入了群聊`,
+              to_group_id: toGroupId,
+              tip: 'joinGroup'
+            });
+          }
+          
+          socket.join(toGroupId);
+          const groupItem = await getGroupItem({ groupId: toGroupId });
+          fn(groupItem);
+          // socket.broadcast.to(toGroupId).emit('getGroupMsg', {
+          //   ...userInfo,
+          //   message: `${userInfo.name}加入了群聊`,
+          //   to_group_id: toGroupId,
+          //   tip: 'joinGroup'
+          // });
+        } catch(e) {
+          console.log('error', error.message);
+          io.to(socketId).emit('error', { code: 500, message: error.message });
+        }
       });
 
       // 退群
@@ -192,13 +209,14 @@ module.exports = (server) => {
       });
 
 
-      // 机器人聊天
+      // 机器人聊天，监听前台发出的 robotChat 
       socket.on('robotChat', async (data, fn) => {
         const date = {
           key: '92febb91673740c2814911a6c16dbcc5',
           info: data.message,
           userid: data.user_id
         };
+        // 图灵机器人聊天，请求第三方接口
         const options = {
           method: 'POST',
           uri: 'http://www.tuling123.com/openapi/api',
@@ -206,7 +224,7 @@ module.exports = (server) => {
           json: true // Automatically stringifies the body to JSON
         };
         const response = await request(options);
-        fn(response);
+        fn(response); // 返回第三方接口的数据给前台
       });
 
 
