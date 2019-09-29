@@ -38,16 +38,7 @@ export default class BrowserNotification {
       return;
     }
     if (this.permission && this.permission !== 'denied') {
-      this.notification.requestPremission.then((status) => {
-        if (this.permission !== status) {
-          this.permission = status;
-        }
-        if (status === 'granted') {
-          this._notificationEnable = true;
-        }
-      });
-
-      // this.notification.requestPermission((status) => {
+      // this.notification.requestPremission.then((status) => {
       //   if (this.permission !== status) {
       //     this.permission = status;
       //   }
@@ -55,6 +46,15 @@ export default class BrowserNotification {
       //     this._notificationEnable = true;
       //   }
       // });
+
+      this.notification.requestPermission((status) => {
+        if (this.permission !== status) {
+          this.permission = status;
+        }
+        if (status === 'granted') {
+          this._notificationEnable = true;
+        }
+      });
     }
   }
 

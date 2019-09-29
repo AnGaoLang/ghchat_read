@@ -63,33 +63,33 @@ class GroupChat extends Component {
   // 加入群组
   joinGroup = async () => {
 
-    if (this.state.disableJoinButton) return;
-    this.setState({ disableJoinButton: true });
-    const {
-      allGroupChats, homePageList, updateHomePageList, addGroupMessageAndInfo
-    } = this.props;
-    const response = await request.socketEmitAndGetResponse('joinGroup', { userInfo: this._userInfo, toGroupId: this.chatId },
-      (error) => {
-        notification('加群失败', 'error', 1.5);
-        this.setState({ disableJoinButton: false });
-      }
-    );
-    const { messages, groupInfo } = response;
-    const name = groupInfo && groupInfo.name;
-    let lastContent;
-    if (messages.length > 1) {
-      lastContent = { ...messages[messages.length - 1], name };
-    } else {
-      lastContent = {
-        ...groupInfo,
-        message: '加入群成功，开始聊天吧:)',
-        time: Date.parse(new Date()) / 1000
-      };
-    }
-    addGroupMessageAndInfo({
-      allGroupChats, messages, groupId: this.chatId, groupInfo
-    });
-    updateHomePageList({ data: lastContent, homePageList });
+    // if (this.state.disableJoinButton) return;
+    // this.setState({ disableJoinButton: true });
+    // const {
+    //   allGroupChats, homePageList, updateHomePageList, addGroupMessageAndInfo
+    // } = this.props;
+    // const response = await request.socketEmitAndGetResponse('joinGroup', { userInfo: this._userInfo, toGroupId: this.chatId },
+    //   (error) => {
+    //     notification('加群失败', 'error', 1.5);
+    //     this.setState({ disableJoinButton: false });
+    //   }
+    // );
+    // const { messages, groupInfo } = response;
+    // const name = groupInfo && groupInfo.name;
+    // let lastContent;
+    // if (messages.length > 1) {
+    //   lastContent = { ...messages[messages.length - 1], name };
+    // } else {
+    //   lastContent = {
+    //     ...groupInfo,
+    //     message: '加入群成功，开始聊天吧:)',
+    //     time: Date.parse(new Date()) / 1000
+    //   };
+    // }
+    // addGroupMessageAndInfo({
+    //   allGroupChats, messages, groupId: this.chatId, groupInfo
+    // });
+    // updateHomePageList({ data: lastContent, homePageList });
 
     const {
       allGroupChats, homePageList, updateHomePageList, addGroupMessageAndInfo
